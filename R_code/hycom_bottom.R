@@ -145,12 +145,12 @@ uv_cols2 <- uv_col(length(uv_breaks2)-1)
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
 png('hycom_bottom_now.png', height = 6, width = 11, units = 'in', res=300)
-par(mfrow=c(1,2),mar=c(4.5,4,2,1))
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
-          sal_bot_now,breaks=sal_breaks,col=sal_cols,asp=1,
+          temp_bot_now,breaks=temp_breaks,col=temp_cols,asp=1,
           xlab='',ylab='',las=1,
-          nlevel=length(sal_cols),legend.mar=4)
+          nlevel=length(temp_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
@@ -162,13 +162,13 @@ contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
-mtext('Salinity (PSU)',adj=1)
+mtext(expression(paste('Bottom Temperature (',degree,'C)')),adj=1)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
-          temp_bot_now,breaks=temp_breaks,col=temp_cols,asp=1,
+          sal_bot_now,breaks=sal_breaks,col=sal_cols,asp=1,
           xlab='',ylab='',las=1,
-          nlevel=length(sal_ctemp_colsols),legend.mar=4)
+          nlevel=length(sal_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
@@ -180,7 +180,7 @@ contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
-mtext(expression(paste('Bottom Temperature (',degree,'C)')),adj=1)
+mtext('Bottom Salinity (PSU)',adj=1)
 dev.off()
 
 # imagePlot(lon[ind_lon]-360,
@@ -256,23 +256,15 @@ temp_lm_cols <- c(lm_neg(length(which(temp_lm_brks<0))),
 
 
 ### plots
-imagePlot(lon[ind_lon]-360,
-          lat[ind_lat],
-          sal_lm2,
-          asp=1,breaks=sal_lm_brks,col=sal_lm_cols)
-plot(world,col='gray70',add=T)
-arrows(lonlat$lon,
-       lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
-       length = .025,
-       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
-contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
-
+setwd('~/Documents/R/Github/SWFL_conditions/figures')
+png('hycom_bottom_lin.png', height = 6, width = 11, units = 'in', res=300)
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
           temp_lm2,
-          asp=1,breaks=temp_lm_brks,col=temp_lm_cols)
+          asp=1,breaks=temp_lm_brks,col=temp_lm_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(temp_lm_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
@@ -281,3 +273,25 @@ arrows(lonlat$lon,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('7-day change in bottom Temperature (',degree,'C)')),adj=1)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sal_lm2,
+          asp=1,breaks=sal_lm_brks,col=sal_lm_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(sal_lm_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
+       length = .025,
+       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+# mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext('7-day change in bottom Salinity (PSU)',adj=1)
+dev.off()
