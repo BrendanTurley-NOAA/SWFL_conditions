@@ -144,7 +144,7 @@ uv_cols2 <- uv_col(length(uv_breaks2)-1)
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
-png('hycom_bottom_now.png', height = 6, width = 8, units = 'in', res=300)
+png('hycom_bottom_now.png', height = 6, width = 11, units = 'in', res=300)
 par(mfrow=c(1,2),mar=c(4.5,4,2,1))
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
