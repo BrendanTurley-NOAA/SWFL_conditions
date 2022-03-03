@@ -192,7 +192,7 @@ mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('Bottom Salinity (PSU)',adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
-      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
 
 # imagePlot(lon[ind_lon]-360,
@@ -289,7 +289,7 @@ mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day change in bottom Temperature (',degree,'C)')),adj=1)
 mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
-      line=2,side=3,col='red',font=2,adj=0,cex=.75,outer=F)
+      line=2,side=3,col='red',font=2,adj=0,cex=1,outer=F)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
@@ -309,7 +309,7 @@ mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day change in bottom Salinity (PSU)',adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
-      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
 
 
@@ -335,7 +335,7 @@ mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day Bottom Temperature (',degree,'C) standard deviation')),adj=1)
 mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
-      line=2,side=3,col='red',font=2,adj=0,cex=.75,outer=F)
+      line=2,side=3,col='red',font=2,adj=0,cex=1,outer=F)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
@@ -355,5 +355,5 @@ mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
-      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
