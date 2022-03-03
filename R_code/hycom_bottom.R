@@ -325,10 +325,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_nows),
-       lonlat$lat+as.vector(v_nows),
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
        length = .025,
-       col=alpha('gray50',(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
@@ -345,10 +345,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_nows),
-       lonlat$lat+as.vector(v_nows),
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
        length = .025,
-       col=alpha('gray50',(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
