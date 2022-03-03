@@ -54,7 +54,6 @@ latbox_s <- 24.5 ### remove the Keys
 ### bathymetry
 b_url <- 'https://tds.hycom.org/thredds/dodsC/datasets/GLBy0.08/expt_93.0/topo/depth_GLBy0.08_09m11.nc'
 ### parameters
-# url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/ts3z'
 url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0'
 ### forecast
 f_url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/FMRC/GLBy0.08_930_FMRC_best.ncd'
@@ -64,6 +63,8 @@ data <- nc_open(url)
 time <- ncvar_get(data,'time')
 time2 <- as.Date(time/24,origin='2000-01-01 00:00:00')
 time3 <- as.POSIXct(time*3600,origin='2000-01-01',tz='GMT')
+# time2 <- as.Date(time/24,origin='2022-02-25 12:00:00')
+# time3 <- as.POSIXct(time*3600,origin='2022-02-25 12:00:00',tz='GMT')
 
 lat <- ncvar_get(data,'lat')
 ind_lat <- which(lat>=latbox_s & lat<=latbox_n)
