@@ -35,11 +35,12 @@ world <- crop(world, extent(-87, -79, 24, 31))
 
 ### colorpalettes
 ### breaks and colors
-temp_col <- colorRampPalette(c(1,'purple','darkorange','gold'))
+temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
 sal_col <- colorRampPalette(c('purple4','dodgerblue4','seagreen3','khaki1'))
 uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
 lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
+col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
 
 ################## geogrpahic scope
 lonbox_e <- -80.5 ### Florida Bay
@@ -108,9 +109,12 @@ n <- n*8
 sal_bot <- ncvar_get(data,'salinity_bottom',
                      start=c(ind_lon[1],ind_lat[1],length(time)-n),
                      count=c(length(ind_lon),length(ind_lat),1+n))
+sal_bsd <- apply(sal_bot,c(1,2),sd,na.rm=T)
+
 temp_bot <- ncvar_get(data,'water_temp_bottom',
                       start=c(ind_lon[1],ind_lat[1],length(time)-n),
                       count=c(length(ind_lon),length(ind_lat),1+n))
+temp_bsd <- apply(temp_bot,c(1,2),sd,na.rm=T)
 
 u_bot <- ncvar_get(data,'water_u_bottom',
                    start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -140,7 +144,12 @@ uv_breaks <- pretty(uv_now,n=20)
 uv_cols <- uv_col(length(uv_breaks)-1)
 uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
-
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
+tsd_cols <- col_sd(length(tsd_breaks)-1)
+temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- quantile(temp_bsd,.99,na.rm=T)
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
+ssd_cols <- col_sd(length(ssd_breaks)-1)
+sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- quantile(sal_bsd,.99,na.rm=T)
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
@@ -294,4 +303,46 @@ contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day change in bottom Salinity (PSU)',adj=1)
+dev.off()
+
+
+### plots
+setwd('~/Documents/R/Github/SWFL_conditions/figures')
+png('hycom_bottom_sd.png', height = 6, width = 11, units = 'in', res=300)
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          temp_bsd,breaks=tsd_breaks,col=tsd_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(tsd_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_nows),
+       lonlat$lat+as.vector(v_nows),
+       length = .025,
+       col=alpha('gray50',(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('7-day Bottom Temperature (',degree,'C) standard deviation')),adj=1)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sal_bsd,breaks=ssd_breaks,col=ssd_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(ssd_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_nows),
+       lonlat$lat+as.vector(v_nows),
+       length = .025,
+       col=alpha('gray50',(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+# mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
 dev.off()
