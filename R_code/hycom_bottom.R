@@ -106,6 +106,7 @@ names(lonlat) <- c('lon','lat')
 
 n <- 7
 n <- n*8
+time2[c((length(time)-n),length(time))]
 sal_bot <- ncvar_get(data,'salinity_bottom',
                      start=c(ind_lon[1],ind_lat[1],length(time)-n),
                      count=c(length(ind_lon),length(ind_lat),1+n))
@@ -190,6 +191,8 @@ contour(topo_lon,topo_lat,topo,
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('Bottom Salinity (PSU)',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
 dev.off()
 
 # imagePlot(lon[ind_lon]-360,
@@ -285,6 +288,8 @@ contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day change in bottom Temperature (',degree,'C)')),adj=1)
+mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
+      line=2,side=3,col='red',font=2,adj=0,cex=.75,outer=F)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
@@ -303,6 +308,8 @@ contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day change in bottom Salinity (PSU)',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
 dev.off()
 
 
@@ -327,6 +334,8 @@ contour(topo_lon,topo_lat,topo,
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day Bottom Temperature (',degree,'C) standard deviation')),adj=1)
+mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
+      line=2,side=3,col='red',font=2,adj=0,cex=.75,outer=F)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
@@ -345,4 +354,6 @@ contour(topo_lon,topo_lat,topo,
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=.75,outer=F)
 dev.off()
