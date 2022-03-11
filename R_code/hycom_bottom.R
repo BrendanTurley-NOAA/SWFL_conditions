@@ -26,9 +26,6 @@ topo_lon <- topo_lon[ind_lon]
 topo <- topo[ind_lon,ind_lat]
 
 ### load map
-# setwd("C:/Users/brendan.turley/Desktop/FL_habs/ne_10m_admin_0_countries")
-# setwd("~/Desktop/professional/biblioteca/data/shapefiles/ne_10m_admin_0_countries")
-# world <- readOGR('ne_10m_admin_0_countries.shp')
 setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_shp/h/")
 world <- readOGR('GSHHS_h_L1.shp')
 world <- crop(world, extent(-87, -79, 24, 31))
@@ -53,11 +50,10 @@ latbox_s <- 24.5 ### remove the Keys
 # https://tds.hycom.org/thredds/catalogs/GLBy0.08/expt_93.0.html
 ### bathymetry
 b_url <- 'https://tds.hycom.org/thredds/dodsC/datasets/GLBy0.08/expt_93.0/topo/depth_GLBy0.08_09m11.nc'
-### parameters
-url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0'
-### forecast
-f_url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/FMRC/GLBy0.08_930_FMRC_best.ncd'
 
+
+### now
+url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0'
 data <- nc_open(url)
 
 time <- ncvar_get(data,'time')
@@ -317,6 +313,243 @@ dev.off()
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
 png('hycom_bottom_sd.png', height = 6, width = 11, units = 'in', res=300)
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          temp_bsd,breaks=tsd_breaks,col=tsd_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(tsd_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
+       length = .025,
+       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('7-day Bottom Temperature (',degree,'C) standard deviation')),adj=1)
+mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
+      line=2,side=3,col='red',font=2,adj=0,cex=1,outer=F)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sal_bsd,breaks=ssd_breaks,col=ssd_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(ssd_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
+       length = .025,
+       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+# mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
+dev.off()
+
+
+### forecast
+f_url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0/FMRC/GLBy0.08_930_FMRC_best.ncd'
+
+data <- nc_open(f_url)
+
+origin <- substr(data$var$time_offset$units,13,100)
+# time <- ncvar_get(data,'time_offset')
+
+time <- ncvar_get(data,'time')
+time2 <- as.Date(time/24,origin=origin)
+time3 <- as.POSIXct(time*3600,origin=origin,tz='GMT')
+
+
+lat <- ncvar_get(data,'lat')
+ind_lat <- which(lat>=latbox_s & lat<=latbox_n)
+lon <- ncvar_get(data,'lon')
+ind_lon <- which(lon>=lonbox_w & lon<=lonbox_e)
+
+# z <- ncvar_get(data,'depth')
+# 
+# sal_bot_now <- ncvar_get(data,'salinity_bottom',
+#                          start=c(ind_lon[1],ind_lat[1],length(time)),
+#                          count=c(length(ind_lon),length(ind_lat),1))
+# temp_bot_now <- ncvar_get(data,'water_temp_bottom',
+#                           start=c(ind_lon[1],ind_lat[1],length(time)),
+#                           count=c(length(ind_lon),length(ind_lat),1))
+
+# u_now <- ncvar_get(data,'water_u',
+#                           start=c(ind_lon[1],ind_lat[1],1,length(time)),
+#                           count=c(length(ind_lon),length(ind_lat),1,1))
+# 
+# v_now <- ncvar_get(data,'water_v',
+#                    start=c(ind_lon[1],ind_lat[1],1,length(time)),
+#                    count=c(length(ind_lon),length(ind_lat),1,1))
+
+# u_now <- ncvar_get(data,'water_u_bottom',
+#                    start=c(ind_lon[1],ind_lat[1],length(time)),
+#                    count=c(length(ind_lon),length(ind_lat),1))
+# 
+# v_now <- ncvar_get(data,'water_v_bottom',
+#                    start=c(ind_lon[1],ind_lat[1],length(time)),
+#                    count=c(length(ind_lon),length(ind_lat),1))
+# 
+# uv_now <- sqrt(u_now^2 + v_now^2)
+# u_nows <- u_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+# v_nows <- v_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+# uv_now_sub <- uv_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+# lons <- lon[ind_lon[seq(1,length(ind_lon),2)]]-360
+# lats <- lat[ind_lat[seq(1,length(ind_lat),2)]]
+# lonlat <- expand.grid(lons,lats)
+# names(lonlat) <- c('lon','lat')
+
+n <- 7
+n <- n*8
+time2[c((length(time)-n),length(time))]
+sal_bot <- ncvar_get(data,'salinity_bottom',
+                     start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                     count=c(length(ind_lon),length(ind_lat),1+n))
+sal_bsd <- apply(sal_bot,c(1,2),sd,na.rm=T)
+
+temp_bot <- ncvar_get(data,'water_temp_bottom',
+                      start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                      count=c(length(ind_lon),length(ind_lat),1+n))
+temp_bsd <- apply(temp_bot,c(1,2),sd,na.rm=T)
+
+u_bot <- ncvar_get(data,'water_u_bottom',
+                   start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                   count=c(length(ind_lon),length(ind_lat),1+n))
+u_bot <- apply(u_bot,c(1,2),mean,na.rm=T)
+
+v_bot <- ncvar_get(data,'water_v_bottom',
+                   start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                   count=c(length(ind_lon),length(ind_lat),1+n))
+v_bot <- apply(v_bot,c(1,2),mean,na.rm=T)
+
+uv_bot <- sqrt(u_bot^2 + v_bot^2)
+u_bot <- u_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+v_bot <- v_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+uv_bot_sub <- uv_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+
+nc_close(data)
+
+### breaks and colors
+# sal_breaks <- pretty(sal_bot_now,n=20)
+# sal_cols <- sal_col(length(sal_breaks)-1)
+# temp_bot_now[which(temp_bot_now<10)] <- 10
+# temp_breaks <- pretty(temp_bot_now,n=20)
+# temp_cols <- temp_col(length(temp_breaks)-1)
+# uv_breaks <- pretty(uv_now,n=20)
+# uv_cols <- uv_col(length(uv_breaks)-1)
+uv_breaks2 <- pretty(uv_bot,n=20)
+uv_cols2 <- uv_col(length(uv_breaks2)-1)
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
+tsd_cols <- col_sd(length(tsd_breaks)-1)
+temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- quantile(temp_bsd,.99,na.rm=T)
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
+ssd_cols <- col_sd(length(ssd_breaks)-1)
+sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- quantile(sal_bsd,.99,na.rm=T)
+
+
+### 7 day linear trend
+sal_lm <- sal_p <- matrix(NA,length(ind_lon),length(ind_lat))
+for(i in 1:length(ind_lon)){
+  for(j in 1:length(ind_lat)){
+    if(all(!is.na(sal_bot[i,j,]))){
+      res <- lm(sal_bot[i,j,]~c(1:dim(sal_bot)[3]))
+      sal_lm[i,j] <- coefficients(summary(res))[2]
+      sal_p[i,j] <- coefficients(summary(res))[8]
+    }
+  }
+}
+plot(sal_lm,sal_p)
+sal_lm[which(sal_lm<(-.05))] <- -.05
+sal_lm[which(sal_lm>.05)] <- .05
+sal_lm2 <- sal_lm
+sal_lm2[which(sal_p>.1)] <- NA
+
+
+temp_lm <- temp_p <- matrix(NA,length(ind_lon),length(ind_lat))
+for(i in 1:length(ind_lon)){
+  for(j in 1:length(ind_lat)){
+    if(all(!is.na(temp_bot[i,j,]))){
+      res <- lm(temp_bot[i,j,]~c(1:dim(temp_bot)[3]))
+      temp_lm[i,j] <- coefficients(summary(res))[2]
+      temp_p[i,j] <- coefficients(summary(res))[8]
+    }
+  }
+}
+plot(temp_lm,temp_p)
+temp_lm[which(temp_lm<(-.05))] <- -.05
+temp_lm[which(temp_lm>.05)] <- .05
+temp_lm2 <- temp_lm
+temp_lm2[which(temp_p>.1)] <- NA
+
+
+### breaks and colors
+sal_lm_brks <- seq(-.05,.05,.005)
+sal_lm_cols <- c(lm_neg(length(which(sal_lm_brks<0))),
+                 lm_pos(length(which(sal_lm_brks>0))))
+
+temp_lm_brks <- seq(-.05,.05,.005)
+temp_lm_cols <- c(lm_neg(length(which(temp_lm_brks<0))),
+                  lm_pos(length(which(temp_lm_brks>0))))
+
+
+### plots
+setwd('~/Documents/R/Github/SWFL_conditions/figures')
+png('hycom_bottom_lin_for.png', height = 6, width = 11, units = 'in', res=300)
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          temp_lm2,
+          asp=1,breaks=temp_lm_brks,col=temp_lm_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(temp_lm_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
+       length = .025,
+       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('7-day change in bottom Temperature (',degree,'C)')),adj=1)
+mtext(paste('7-day period: ',time2[(length(time)-n)],'-',time2[length(time)]),
+      line=2,side=3,col='red',font=2,adj=0,cex=1,outer=F)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sal_lm2,
+          asp=1,breaks=sal_lm_brks,col=sal_lm_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(sal_lm_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot),
+       lonlat$lat+as.vector(v_bot),
+       length = .025,
+       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+# mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext('7-day change in bottom Salinity (PSU)',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
+dev.off()
+
+
+### plots
+setwd('~/Documents/R/Github/SWFL_conditions/figures')
+png('hycom_bottom_sd_for.png', height = 6, width = 11, units = 'in', res=300)
 par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
