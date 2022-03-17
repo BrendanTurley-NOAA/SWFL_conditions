@@ -69,12 +69,17 @@ ind_lon <- which(lon>=lonbox_w & lon<=lonbox_e)
 
 z <- ncvar_get(data,'depth')
 
+n <- 2 # 48-hour mean
+n <- n*8
 sal_bot_now <- ncvar_get(data,'salinity_bottom',
-                         start=c(ind_lon[1],ind_lat[1],length(time)),
-                         count=c(length(ind_lon),length(ind_lat),1))
+                         start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                         count=c(length(ind_lon),length(ind_lat),1+n))
+sal_bot_now <- apply(sal_bot_now,c(1,2),mean,na.rm=T)
+
 temp_bot_now <- ncvar_get(data,'water_temp_bottom',
-                          start=c(ind_lon[1],ind_lat[1],length(time)),
-                          count=c(length(ind_lon),length(ind_lat),1))
+                          start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                          count=c(length(ind_lon),length(ind_lat),1+n))
+temp_bot_now <- apply(temp_bot_now,c(1,2),mean,na.rm=T)
 
 # u_now <- ncvar_get(data,'water_u',
 #                           start=c(ind_lon[1],ind_lat[1],1,length(time)),
@@ -85,12 +90,14 @@ temp_bot_now <- ncvar_get(data,'water_temp_bottom',
 #                    count=c(length(ind_lon),length(ind_lat),1,1))
 
 u_now <- ncvar_get(data,'water_u_bottom',
-                   start=c(ind_lon[1],ind_lat[1],length(time)),
-                   count=c(length(ind_lon),length(ind_lat),1))
+                   start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                   count=c(length(ind_lon),length(ind_lat),1+n))
+u_now <- apply(u_now,c(1,2),mean,na.rm=T)
 
 v_now <- ncvar_get(data,'water_v_bottom',
-                   start=c(ind_lon[1],ind_lat[1],length(time)),
-                   count=c(length(ind_lon),length(ind_lat),1))
+                   start=c(ind_lon[1],ind_lat[1],length(time)-n),
+                   count=c(length(ind_lon),length(ind_lat),1+n))
+v_now <- apply(v_now,c(1,2),mean,na.rm=T)
 
 uv_now <- sqrt(u_now^2 + v_now^2)
 u_nows <- u_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
@@ -101,7 +108,7 @@ lats <- lat[ind_lat[seq(1,length(ind_lat),2)]]
 lonlat <- expand.grid(lons,lats)
 names(lonlat) <- c('lon','lat')
 
-n <- 7
+n <- 7 # 7-day regression
 n <- n*8
 time2[c((length(time)-n),length(time))]
 sal_bot <- ncvar_get(data,'salinity_bottom',
@@ -144,10 +151,10 @@ uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
-temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- quantile(temp_bsd,.99,na.rm=T)
+temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- round(quantile(temp_bsd,.99,na.rm=T))
 ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
-sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- quantile(sal_bsd,.99,na.rm=T)
+sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- round(quantile(sal_bsd,.99,na.rm=T),2)
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
@@ -204,18 +211,18 @@ dev.off()
 #        col=alpha(1,(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
 # contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 
-imagePlot(lon[ind_lon]-360,
-          lat[ind_lat],
-          uv_bot,breaks=uv_breaks2,col=uv_cols2,asp=1)
-plot(world,col='gray70',add=T)
-arrows(lonlat$lon,
-       lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
-       length = .025,
-       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
-contour(topo_lon,topo_lat,topo,
-        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+# imagePlot(lon[ind_lon]-360,
+#           lat[ind_lat],
+#           uv_bot,breaks=uv_breaks2,col=uv_cols2,asp=1)
+# plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot),
+#        lonlat$lat+as.vector(v_bot),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+# contour(topo_lon,topo_lat,topo,
+#         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 
 
 
@@ -450,10 +457,10 @@ uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
-temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- quantile(temp_bsd,.99,na.rm=T)
+temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- round(quantile(temp_bsd,.99,na.rm=T),2)
 ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
-sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- quantile(sal_bsd,.99,na.rm=T)
+sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- round(quantile(sal_bsd,.99,na.rm=T),2)
 
 
 ### 7 day linear trend
