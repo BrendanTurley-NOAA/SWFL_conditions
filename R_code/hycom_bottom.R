@@ -238,8 +238,13 @@ for(i in 1:length(ind_lon)){
   }
 }
 plot(sal_lm,sal_p)
-sal_lm[which(sal_lm<(-.05))] <- -.05
-sal_lm[which(sal_lm>.05)] <- .05
+limit <- round(ifelse(abs(range(sal_lm,na.rm=T)[1])>abs(range(sal_lm,na.rm=T)[2]),
+                abs(range(sal_lm,na.rm=T)[2]),
+                abs(range(sal_lm,na.rm=T)[1])),2)
+sal_lm[which(sal_lm<(-limit))] <- -limit
+sal_lm[which(sal_lm>limit)] <- limit
+# sal_lm[which(sal_lm<(-.05))] <- -.05
+# sal_lm[which(sal_lm>.05)] <- .05
 sal_lm2 <- sal_lm
 sal_lm2[which(sal_p>.1)] <- NA
 
@@ -255,18 +260,25 @@ for(i in 1:length(ind_lon)){
   }
 }
 plot(temp_lm,temp_p)
-temp_lm[which(temp_lm<(-.05))] <- -.05
-temp_lm[which(temp_lm>.05)] <- .05
+limit <- round(ifelse(abs(range(temp_lm,na.rm=T)[1])>abs(range(temp_lm,na.rm=T)[2]),
+                      abs(range(temp_lm,na.rm=T)[2]),
+                      abs(range(temp_lm,na.rm=T)[1])),2)
+temp_lm[which(temp_lm<(-limit))] <- -limit
+temp_lm[which(temp_lm>limit)] <- limit
+# temp_lm[which(temp_lm<(-.05))] <- -.05
+# temp_lm[which(temp_lm>.05)] <- .05
 temp_lm2 <- temp_lm
 temp_lm2[which(temp_p>.1)] <- NA
 
 
 ### breaks and colors
-sal_lm_brks <- seq(-.05,.05,.005)
+# sal_lm_brks <- seq(-.05,.05,.005)
+sal_lm_brks <- pretty(sal_lm,20)
 sal_lm_cols <- c(lm_neg(length(which(sal_lm_brks<0))),
                  lm_pos(length(which(sal_lm_brks>0))))
 
-temp_lm_brks <- seq(-.05,.05,.005)
+# temp_lm_brks <- seq(-.05,.05,.005)
+temp_lm_brks <- pretty(temp_lm,20)
 temp_lm_cols <- c(lm_neg(length(which(temp_lm_brks<0))),
                   lm_pos(length(which(temp_lm_brks>0))))
 
@@ -475,8 +487,13 @@ for(i in 1:length(ind_lon)){
   }
 }
 plot(sal_lm,sal_p)
-sal_lm[which(sal_lm<(-.05))] <- -.05
-sal_lm[which(sal_lm>.05)] <- .05
+limit <- round(ifelse(abs(range(sal_lm,na.rm=T)[1])>abs(range(sal_lm,na.rm=T)[2]),
+                      abs(range(sal_lm,na.rm=T)[2]),
+                      abs(range(sal_lm,na.rm=T)[1])),2)
+sal_lm[which(sal_lm<(-limit))] <- -limit
+sal_lm[which(sal_lm>limit)] <- limit
+# sal_lm[which(sal_lm<(-.05))] <- -.05
+# sal_lm[which(sal_lm>.05)] <- .05
 sal_lm2 <- sal_lm
 sal_lm2[which(sal_p>.1)] <- NA
 
@@ -492,18 +509,26 @@ for(i in 1:length(ind_lon)){
   }
 }
 plot(temp_lm,temp_p)
-temp_lm[which(temp_lm<(-.05))] <- -.05
-temp_lm[which(temp_lm>.05)] <- .05
+limit <- round(ifelse(abs(range(temp_lm,na.rm=T)[1])>abs(range(temp_lm,na.rm=T)[2]),
+                      abs(range(temp_lm,na.rm=T)[2]),
+                      abs(range(temp_lm,na.rm=T)[1])),2)
+temp_lm[which(temp_lm<(-limit))] <- -limit
+temp_lm[which(temp_lm>limit)] <- limit
+# temp_lm[which(temp_lm<(-.05))] <- -.05
+# temp_lm[which(temp_lm>.05)] <- .05
 temp_lm2 <- temp_lm
 temp_lm2[which(temp_p>.1)] <- NA
 
 
 ### breaks and colors
-sal_lm_brks <- seq(-.05,.05,.005)
+### breaks and colors
+# sal_lm_brks <- seq(-.05,.05,.005)
+sal_lm_brks <- pretty(sal_lm,20)
 sal_lm_cols <- c(lm_neg(length(which(sal_lm_brks<0))),
                  lm_pos(length(which(sal_lm_brks>0))))
 
-temp_lm_brks <- seq(-.05,.05,.005)
+# temp_lm_brks <- seq(-.05,.05,.005)
+temp_lm_brks <- pretty(temp_lm,20)
 temp_lm_cols <- c(lm_neg(length(which(temp_lm_brks<0))),
                   lm_pos(length(which(temp_lm_brks>0))))
 
