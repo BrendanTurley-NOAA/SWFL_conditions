@@ -48,10 +48,6 @@ latbox_n <- 30.5 ### northern coast
 latbox_s <- 24.5 ### remove the Keys
 
 # https://tds.hycom.org/thredds/catalogs/GLBy0.08/expt_93.0.html
-### bathymetry
-b_url <- 'https://tds.hycom.org/thredds/dodsC/datasets/GLBy0.08/expt_93.0/topo/depth_GLBy0.08_09m11.nc'
-
-
 ### now
 url <- 'https://tds.hycom.org/thredds/dodsC/GLBy0.08/expt_93.0'
 data <- nc_open(url)
@@ -80,6 +76,16 @@ temp_bot_now <- ncvar_get(data,'water_temp_bottom',
                           start=c(ind_lon[1],ind_lat[1],length(time)-n),
                           count=c(length(ind_lon),length(ind_lat),1+n))
 temp_bot_now <- apply(temp_bot_now,c(1,2),mean,na.rm=T)
+
+sal_surf_now <- ncvar_get(data,'salinity',
+                         start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
+                         count=c(length(ind_lon),length(ind_lat),1,1+n))
+sal_surf_now <- apply(sal_surf_now,c(1,2),mean,na.rm=T)
+
+temp_surf_now <- ncvar_get(data,'water_temp',
+                          start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
+                          count=c(length(ind_lon),length(ind_lat),1,1+n))
+temp_surf_now <- apply(temp_surf_now,c(1,2),mean,na.rm=T)
 
 # u_now <- ncvar_get(data,'water_u',
 #                           start=c(ind_lon[1],ind_lat[1],1,length(time)),
@@ -138,6 +144,12 @@ uv_bot_sub <- uv_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
 
 nc_close(data)
 
+### bathymetry
+b_url <- 'https://tds.hycom.org/thredds/dodsC/datasets/GLBy0.08/expt_93.0/topo/depth_GLBy0.08_09m11.nc'
+data <- nc_open(b_url)
+bathy <- ncvar_get(data,'bathymetry',
+                   start=c(ind_lon[1],ind_lat[1],1),
+                   count=c(length(ind_lon),length(ind_lat),1))
 
 ### breaks and colors
 sal_breaks <- pretty(sal_bot_now,n=20)
@@ -623,3 +635,13 @@ mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
       line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
+
+
+
+### stratification
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          (temp_surf_now-temp_bot_now)/bathy,asp=1)
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          (sal_surf_now-sal_bot_now)/bathy,asp=1)
