@@ -38,6 +38,7 @@ uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
 lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
 col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
+strat_col <- colorRampPalette(rev(c('purple4','purple2','orchid1','gray90')))
 
 ################## geogrpahic scope
 lonbox_e <- -80.5 ### Florida Bay
@@ -86,14 +87,6 @@ temp_surf_now <- ncvar_get(data,'water_temp',
                           start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
                           count=c(length(ind_lon),length(ind_lat),1,1+n))
 temp_surf_now <- apply(temp_surf_now,c(1,2),mean,na.rm=T)
-
-# u_now <- ncvar_get(data,'water_u',
-#                           start=c(ind_lon[1],ind_lat[1],1,length(time)),
-#                           count=c(length(ind_lon),length(ind_lat),1,1))
-# 
-# v_now <- ncvar_get(data,'water_v',
-#                    start=c(ind_lon[1],ind_lat[1],1,length(time)),
-#                    count=c(length(ind_lon),length(ind_lat),1,1))
 
 u_now <- ncvar_get(data,'water_u_bottom',
                    start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -150,8 +143,13 @@ data <- nc_open(b_url)
 bathy <- ncvar_get(data,'bathymetry',
                    start=c(ind_lon[1],ind_lat[1],1),
                    count=c(length(ind_lon),length(ind_lat),1))
+nc_close(data)
+
+sal_strat_now <- (sal_surf_now-sal_bot_now)/bathy
+temp_strat_now <- (temp_surf_now-temp_bot_now)/bathy
 
 ### breaks and colors
+quant <- .95
 sal_breaks <- pretty(sal_bot_now,n=20)
 sal_cols <- sal_col(length(sal_breaks)-1)
 temp_bot_now[which(temp_bot_now<10)] <- 10
@@ -161,12 +159,18 @@ uv_breaks <- pretty(uv_now,n=20)
 uv_cols <- uv_col(length(uv_breaks)-1)
 uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
-tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
-temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- round(quantile(temp_bsd,.99,na.rm=T),2)
-ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
+temp_bsd[which(temp_bsd>quantile(temp_bsd,quant,na.rm=T))] <- round(quantile(temp_bsd,quant,na.rm=T),2)
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
-sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- round(quantile(sal_bsd,.99,na.rm=T),2)
+sal_bsd[which(sal_bsd>quantile(sal_bsd,quant,na.rm=T))] <- round(quantile(sal_bsd,quant,na.rm=T),2)
+sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
+sstrat_cols <- rev(strat_col(length(sstrat_breaks)-1))
+sal_strat_now[which(sal_strat_now>quantile(sal_strat_now,quant,na.rm=T))] <- round(quantile(sal_strat_now,quant,na.rm=T),2)
+tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
+tstrat_cols <- strat_col(length(tstrat_breaks)-1)
+temp_strat_now[which(temp_strat_now>quantile(temp_strat_now,quant,na.rm=T))] <- round(quantile(temp_strat_now,quant,na.rm=T),2)
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
@@ -207,6 +211,51 @@ contour(topo_lon,topo_lat,topo,
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('Bottom Salinity (PSU)',adj=1)
+mtext(paste('Processed: ',as.Date(Sys.time())),
+      line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
+dev.off()
+
+
+setwd('~/Documents/R/Github/SWFL_conditions/figures')
+png('hycom_strat_now.png', height = 6, width = 11, units = 'in', res=300)
+par(mfrow=c(1,2),mar=c(5,5,2,1),oma=c(1,1,1,1.5))
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          temp_strat_now,
+          breaks=tstrat_breaks,col=tstrat_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(temp_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_nows),
+       lonlat$lat+as.vector(v_nows),
+       length = .025,
+       col=alpha(1,(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('Temperature stratification (',degree,'C m'^-1,')')),adj=1)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sal_strat_now,
+          breaks=sstrat_breaks,col=sstrat_cols,asp=1,
+          xlab='',ylab='',las=1,
+          nlevel=length(sal_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_nows),
+       lonlat$lat+as.vector(v_nows),
+       length = .025,
+       col=alpha(1,(as.vector(uv_now_sub)/max(uv_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+# mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('Salinity stratification (PSU m'^-1,')')),adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
       line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
@@ -404,40 +453,6 @@ lat <- ncvar_get(data,'lat')
 ind_lat <- which(lat>=latbox_s & lat<=latbox_n)
 lon <- ncvar_get(data,'lon')
 ind_lon <- which(lon>=lonbox_w & lon<=lonbox_e)
-
-# z <- ncvar_get(data,'depth')
-# 
-# sal_bot_now <- ncvar_get(data,'salinity_bottom',
-#                          start=c(ind_lon[1],ind_lat[1],length(time)),
-#                          count=c(length(ind_lon),length(ind_lat),1))
-# temp_bot_now <- ncvar_get(data,'water_temp_bottom',
-#                           start=c(ind_lon[1],ind_lat[1],length(time)),
-#                           count=c(length(ind_lon),length(ind_lat),1))
-
-# u_now <- ncvar_get(data,'water_u',
-#                           start=c(ind_lon[1],ind_lat[1],1,length(time)),
-#                           count=c(length(ind_lon),length(ind_lat),1,1))
-# 
-# v_now <- ncvar_get(data,'water_v',
-#                    start=c(ind_lon[1],ind_lat[1],1,length(time)),
-#                    count=c(length(ind_lon),length(ind_lat),1,1))
-
-# u_now <- ncvar_get(data,'water_u_bottom',
-#                    start=c(ind_lon[1],ind_lat[1],length(time)),
-#                    count=c(length(ind_lon),length(ind_lat),1))
-# 
-# v_now <- ncvar_get(data,'water_v_bottom',
-#                    start=c(ind_lon[1],ind_lat[1],length(time)),
-#                    count=c(length(ind_lon),length(ind_lat),1))
-# 
-# uv_now <- sqrt(u_now^2 + v_now^2)
-# u_nows <- u_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-# v_nows <- v_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-# uv_now_sub <- uv_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-# lons <- lon[ind_lon[seq(1,length(ind_lon),2)]]-360
-# lats <- lat[ind_lat[seq(1,length(ind_lat),2)]]
-# lonlat <- expand.grid(lons,lats)
-# names(lonlat) <- c('lon','lat')
 
 n <- 7
 n <- n*8
