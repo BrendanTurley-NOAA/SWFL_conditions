@@ -19,9 +19,7 @@ The bottom temperature, salinity, and currents were extracted from the global [H
 
 ---
 
-# Next 7-day forecasted trends
-
-[Forecast](https://github.com/imaginaryfish/SWFL_conditions/blob/main/forecast.md)
+# [Next 7-day forecasted trends](https://github.com/imaginaryfish/SWFL_conditions/blob/main/forecast.md)
 
 ![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_bottom_lin_for.png "7-day linear trend in conditions")
 
