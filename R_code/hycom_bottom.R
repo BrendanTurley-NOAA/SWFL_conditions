@@ -161,16 +161,17 @@ uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
-temp_bsd[which(temp_bsd>quantile(temp_bsd,quant,na.rm=T))] <- round(quantile(temp_bsd,quant,na.rm=T),2)
+temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(tsd_breaks)]
 ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
-sal_bsd[which(sal_bsd>quantile(sal_bsd,quant,na.rm=T))] <- round(quantile(sal_bsd,quant,na.rm=T),2)
+sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
 sstrat_cols <- rev(strat_col(length(sstrat_breaks)-1))
-sal_strat_now[which(sal_strat_now>quantile(sal_strat_now,quant,na.rm=T))] <- round(quantile(sal_strat_now,quant,na.rm=T),2)
+sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
 tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
 tstrat_cols <- strat_col(length(tstrat_breaks)-1)
-temp_strat_now[which(temp_strat_now>quantile(temp_strat_now,quant,na.rm=T))] <- round(quantile(temp_strat_now,quant,na.rm=T),2)
+temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
+
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
@@ -485,21 +486,15 @@ uv_bot_sub <- uv_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
 nc_close(data)
 
 ### breaks and colors
-# sal_breaks <- pretty(sal_bot_now,n=20)
-# sal_cols <- sal_col(length(sal_breaks)-1)
-# temp_bot_now[which(temp_bot_now<10)] <- 10
-# temp_breaks <- pretty(temp_bot_now,n=20)
-# temp_cols <- temp_col(length(temp_breaks)-1)
-# uv_breaks <- pretty(uv_now,n=20)
-# uv_cols <- uv_col(length(uv_breaks)-1)
+quant <- .95
 uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
-tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,.99,na.rm=T))],n=20)
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
-temp_bsd[which(temp_bsd>quantile(temp_bsd,.99,na.rm=T))] <- round(quantile(temp_bsd,.99,na.rm=T),2)
-ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,.99,na.rm=T))],n=20)
+temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(tsd_breaks)]
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
-sal_bsd[which(sal_bsd>quantile(sal_bsd,.99,na.rm=T))] <- round(quantile(sal_bsd,.99,na.rm=T),2)
+sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 
 
 ### 7 day linear trend
