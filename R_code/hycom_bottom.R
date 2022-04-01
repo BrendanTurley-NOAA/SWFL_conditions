@@ -1,3 +1,6 @@
+rm(list=ls())
+gc()
+
 library(fields)
 library(ncdf4)
 library(raster)
@@ -38,7 +41,8 @@ uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
 lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
 col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
-strat_col <- colorRampPalette(rev(c('purple4','purple2','orchid1','gray90')))
+strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'))
+strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')))
 
 ################## geogrpahic scope
 lonbox_e <- -80.5 ### Florida Bay
@@ -145,11 +149,11 @@ bathy <- ncvar_get(data,'bathymetry',
                    count=c(length(ind_lon),length(ind_lat),1))
 nc_close(data)
 
-sal_strat_now <- (sal_surf_now-sal_bot_now)/bathy
-temp_strat_now <- (temp_surf_now-temp_bot_now)/bathy
+sal_strat_now <- (sal_bot_now-sal_surf_now)/bathy
+temp_strat_now <- (temp_bot_now-temp_surf_now)/bathy
 
 ### breaks and colors
-quant <- .95
+quant <- .99
 sal_breaks <- pretty(sal_bot_now,n=20)
 sal_cols <- sal_col(length(sal_breaks)-1)
 temp_bot_now[which(temp_bot_now<10)] <- 10
@@ -166,12 +170,23 @@ ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=
 ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
-sstrat_cols <- rev(strat_col(length(sstrat_breaks)-1))
+if(any(sstrat_breaks==0)){
+  sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
+                   strat_p_col(length(which(sstrat_breaks>0))))
+}else{
+  sstrat_cols <- rev(strat_p_col(length(sstrat_breaks)-1))  
+}
 sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
 tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
-tstrat_cols <- strat_col(length(tstrat_breaks)-1)
+if(any(tstrat_breaks==0)){
+  tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
+                   strat_p_col(length(which(tstrat_breaks>0))))
+}else{
+  tstrat_cols <- strat_n_col(length(tstrat_breaks)-1)
+}
 temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
-
+temp_strat_now[which(temp_strat_now<tstrat_breaks[1])] <- tstrat_breaks[1]
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
@@ -486,7 +501,7 @@ uv_bot_sub <- uv_bot[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
 nc_close(data)
 
 ### breaks and colors
-quant <- .95
+quant <- .99
 uv_breaks2 <- pretty(uv_bot,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
