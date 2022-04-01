@@ -171,22 +171,34 @@ ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
 if(any(sstrat_breaks==0)){
+  limit <- mean(abs(range(sal_strat_now,na.rm=T)))
+  sal_strat_now[which(sal_strat_now<(-limit))] <- -limit
+  sal_strat_now[which(sal_strat_now>limit)] <- limit
+  sstrat_breaks <- pretty(sal_strat_now,n=20)
   sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
                    strat_p_col(length(which(sstrat_breaks>0))))
 }else{
   sstrat_cols <- rev(strat_p_col(length(sstrat_breaks)-1))  
+  sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+  sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
 }
-sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
-sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
+# sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+# sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
 tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
 if(any(tstrat_breaks==0)){
+  limit <- mean(abs(range(temp_strat_now,na.rm=T)))
+  temp_strat_now[which(temp_strat_now<(-limit))] <- -limit
+  temp_strat_now[which(temp_strat_now>limit)] <- limit
+  tstrat_breaks <- pretty(temp_strat_now,n=20)
   tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
                    strat_p_col(length(which(tstrat_breaks>0))))
 }else{
   tstrat_cols <- strat_n_col(length(tstrat_breaks)-1)
+  temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
+  temp_strat_now[which(temp_strat_now<tstrat_breaks[1])] <- tstrat_breaks[1]
 }
-temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
-temp_strat_now[which(temp_strat_now<tstrat_breaks[1])] <- tstrat_breaks[1]
+# temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
+# temp_strat_now[which(temp_strat_now<tstrat_breaks[1])] <- tstrat_breaks[1]
 
 ### plots
 setwd('~/Documents/R/Github/SWFL_conditions/figures')
