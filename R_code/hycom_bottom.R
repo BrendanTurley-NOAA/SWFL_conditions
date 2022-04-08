@@ -678,9 +678,18 @@ dev.off()
 
 
 ### stratification
-imagePlot(lon[ind_lon]-360,
-          lat[ind_lat],
-          (temp_surf_now-temp_bot_now)/bathy,asp=1)
-imagePlot(lon[ind_lon]-360,
-          lat[ind_lat],
-          (sal_surf_now-sal_bot_now)/bathy,asp=1)
+strat_ex <- seq(-.3,.3,.01)
+strat_exm <- cbind(strat_ex,strat_ex)
+exp_breaks <- pretty(strat_ex,n=10)
+
+exp_cols <- c(strat_n_col(length(which(exp_breaks<0))),
+              strat_p_col(length(which(exp_breaks>0))))
+
+png('stratification_example.png',width=5,height=2,units='in',res=300)
+image(strat_exm,
+      breaks=exp_breaks,
+      col=exp_cols,
+      xaxt='n',yaxt='n')
+mtext('warmer surface or\nsaltier surface',adj=0)
+mtext('cooler surface or\nfresher surface',adj=1)
+dev.off()

@@ -14,6 +14,8 @@ The past 7-day and next 7-day forecast trends are linear slopes of those respect
 
 ![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_strat_now.png "Current stratification conditions")
 
+![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/stratification_example.png "stratification explanation")
+
 ---
 
 # [Past 7-day trends](https://github.com/imaginaryfish/SWFL_conditions/blob/main/past.md)
