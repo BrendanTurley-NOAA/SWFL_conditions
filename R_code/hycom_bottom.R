@@ -38,8 +38,10 @@ world <- crop(world, extent(-87, -79, 24, 31))
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
 sal_col <- colorRampPalette(c('purple4','dodgerblue4','seagreen3','khaki1'))
 uv_col <- colorRampPalette(c('white','thistle1','purple2'))
-lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
-lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
+# lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
+# lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
+lm_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
+lm_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
 col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
 strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'))
 strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')))
@@ -544,7 +546,7 @@ sal_lm[which(sal_lm>limit)] <- limit
 # sal_lm[which(sal_lm<(-.05))] <- -.05
 # sal_lm[which(sal_lm>.05)] <- .05
 sal_lm2 <- sal_lm
-sal_lm2[which(sal_p>.1)] <- NA
+sal_lm2[which(sal_p>.05)] <- NA
 
 
 temp_lm <- temp_p <- matrix(NA,length(ind_lon),length(ind_lat))
@@ -566,7 +568,7 @@ temp_lm[which(temp_lm>limit)] <- limit
 # temp_lm[which(temp_lm<(-.05))] <- -.05
 # temp_lm[which(temp_lm>.05)] <- .05
 temp_lm2 <- temp_lm
-temp_lm2[which(temp_p>.1)] <- NA
+temp_lm2[which(temp_p>.05)] <- NA
 
 
 ### breaks and colors
