@@ -36,7 +36,7 @@ world <- crop(world, extent(-87, -79, 24, 31))
 ### colorpalettes
 ### breaks and colors
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
-sal_col <- colorRampPalette(c('purple4','dodgerblue4','seagreen3','khaki1'))
+sal_col <- colorRampPalette(c('midnightblue','dodgerblue4','seagreen3','khaki1'))
 uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 # lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
 # lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
