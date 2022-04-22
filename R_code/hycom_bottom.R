@@ -686,6 +686,7 @@ exp_cols <- c(strat_n_col(length(which(exp_breaks<0))),
               strat_p_col(length(which(exp_breaks>0))))
 
 png('stratification_example.png',width=5,height=2,units='in',res=300)
+par(mar=c(4.5,1,4,1))
 image(strat_exm,
       breaks=exp_breaks,
       col=exp_cols,

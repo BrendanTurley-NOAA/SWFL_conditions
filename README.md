@@ -10,7 +10,9 @@ The past 7-day and next 7-day forecast trends are linear slopes of those respect
 
 # Current (past 48-hour mean) conditions
 
-![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_bottom_now.png "Current temperature and salinity conditions")
+![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_surf_now.png "Current surface temperature and salinity conditions")
+
+![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_bottom_now.png "Current bottom temperature and salinity conditions")
 
 ![alt text](https://github.com/imaginaryfish/SWFL_conditions/blob/main/figures/hycom_strat_now.png "Current stratification conditions")
 
