@@ -85,6 +85,11 @@ temp_surf_now <- ncvar_get(data,'water_temp',
                            start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
                            count=c(length(ind_lon),length(ind_lat),1,1+n))
 temp_surf_now <- apply(temp_surf_now,c(1,2),mean,na.rm=T)
+# @ 50m
+temp_50m_now <- ncvar_get(data,'water_temp',
+                           start=c(ind_lon[1],ind_lat[1],which(z==50),length(time)-n),
+                           count=c(length(ind_lon),length(ind_lat),1,1+n))
+temp_50m_now <- apply(temp_50m_now,c(1,2),mean,na.rm=T)
 # bottom
 temp_bot_now <- ncvar_get(data,'water_temp_bottom',
                           start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -97,6 +102,11 @@ sal_surf_now <- ncvar_get(data,'salinity',
                           start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
                           count=c(length(ind_lon),length(ind_lat),1,1+n))
 sal_surf_now <- apply(sal_surf_now,c(1,2),mean,na.rm=T)
+# surface
+sal_50m_now <- ncvar_get(data,'salinity',
+                          start=c(ind_lon[1],ind_lat[1],which(z==50),length(time)-n),
+                          count=c(length(ind_lon),length(ind_lat),1,1+n))
+sal_50m_now <- apply(sal_50m_now,c(1,2),mean,na.rm=T)
 # bottom
 sal_bot_now <- ncvar_get(data,'salinity_bottom',
                          start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -142,8 +152,17 @@ bathy <- ncvar_get(data,'bathymetry',
 nc_close(data)
 
 ### stratification
-sal_strat_now <- (sal_bot_now-sal_surf_now)/bathy
-temp_strat_now <- (temp_bot_now-temp_surf_now)/bathy
+# sal_strat_now <- (sal_bot_now-sal_surf_now)/bathy
+# temp_strat_now <- (temp_bot_now-temp_surf_now)/bathy
+
+# sal_strat_now <- (sal_bot_now-sal_surf_now)
+# temp_strat_now <- (temp_bot_now-temp_surf_now)
+
+sal_50m_now[which(is.na(sal_50m_now))] <- sal_bot_now[which(is.na(sal_50m_now))]
+sal_strat_now <- (sal_50m_now-sal_surf_now)
+
+temp_50m_now[which(is.na(temp_50m_now))] <- temp_bot_now[which(is.na(temp_50m_now))]
+temp_strat_now <- (temp_50m_now-temp_surf_now)
 
 
 ### breaks and colors
@@ -307,7 +326,8 @@ contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
-mtext(expression(paste('Temperature stratification (',degree,'C m'^-1,')')),adj=1)
+# mtext(expression(paste('Temperature stratification (',degree,'C m'^-1,')')),adj=1)
+mtext(expression(paste('Temperature stratification (',Delta, degree,'C)')),adj=1)
 
 imagePlot(lon[ind_lon]-360,
           lat[ind_lat],
@@ -326,7 +346,8 @@ contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
-mtext(expression(paste('Salinity stratification (PSU m'^-1,')')),adj=1)
+# mtext(expression(paste('Salinity stratification (PSU m'^-1,')')),adj=1)
+mtext(expression(paste('Salinity stratification (',Delta,'PSU)')),adj=1)
 mtext(paste('Processed: ',as.Date(Sys.time())),
       line=4,side=1,col='red',font=2,adj=1,cex=1,outer=F)
 dev.off()
