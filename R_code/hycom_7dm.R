@@ -87,26 +87,26 @@ n <- n*8
 temp_surf_7dm <- ncvar_get(data,'water_temp',
                            start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
                            count=c(length(ind_lon),length(ind_lat),1,1+n))
-temp_surf_7dm <- apply(temp_surf_7dm,c(1,2),mean,na.rm=T)
+# temp_surf_7dm <- apply(temp_surf_7dm,c(1,2),mean,na.rm=T)
 # bottom
 temp_bot_7dm <- ncvar_get(data,'water_temp_bottom',
                           start=c(ind_lon[1],ind_lat[1],length(time)-n),
                           count=c(length(ind_lon),length(ind_lat),1+n))
-temp_bot_7dm <- apply(temp_bot_7dm,c(1,2),mean,na.rm=T)
-temp_bsd <- apply(temp_bot,c(1,2),sd,na.rm=T)
+# temp_bot_7dm <- apply(temp_bot_7d,c(1,2),mean,na.rm=T)
+temp_bsd <- apply(temp_bot_7dm,c(1,2),sd,na.rm=T)
 
 ### salinity
 # surface
 sal_surf_7dm <- ncvar_get(data,'salinity',
                           start=c(ind_lon[1],ind_lat[1],1,length(time)-n),
                           count=c(length(ind_lon),length(ind_lat),1,1+n))
-sal_surf_7dm <- apply(sal_surf_7dm,c(1,2),mean,na.rm=T)
+# sal_surf_7dm <- apply(sal_surf_7dm,c(1,2),mean,na.rm=T)
 # bottom
 sal_bot_7dm <- ncvar_get(data,'salinity_bottom',
                          start=c(ind_lon[1],ind_lat[1],length(time)-n),
                          count=c(length(ind_lon),length(ind_lat),1+n))
-sal_bot_7dm <- apply(sal_bot_7dm,c(1,2),mean,na.rm=T)
-sal_bsd <- apply(sal_bot,c(1,2),sd,na.rm=T)
+# sal_bot_7dm <- apply(sal_bot_7d,c(1,2),mean,na.rm=T)
+sal_bsd <- apply(sal_bot_7dm,c(1,2),sd,na.rm=T)
 
 ### currents
 # surface
@@ -147,8 +147,8 @@ bathy <- ncvar_get(data,'bathymetry',
                    count=c(length(ind_lon),length(ind_lat),1))
 nc_close(data)
 
-sal_strat_7dm <- (sal_bot_7dm-sal_surf_7dm)/bathy
-temp_strat_7dm <- (temp_bot_7dm-temp_surf_7dm)/bathy
+# sal_strat_7dm <- (sal_bot_7dm-sal_surf_7dm)/bathy
+# temp_strat_7dm <- (temp_bot_7dm-temp_surf_7dm)/bathy
 
 ### breaks and colors
 quant <- .99
@@ -157,9 +157,9 @@ sal_cols <- sal_col(length(sal_breaks)-1)
 temp_bot_7dm[which(temp_bot_7dm<10)] <- 10
 temp_breaks <- pretty(temp_bot_7dm,n=20)
 temp_cols <- temp_col(length(temp_breaks)-1)
-uv_breaks <- pretty(uv_7dm,n=20)
+uv_breaks <- pretty(uv_surf_7dm,n=20)
 uv_cols <- uv_col(length(uv_breaks)-1)
-uv_breaks2 <- pretty(uv_bot,n=20)
+uv_breaks2 <- pretty(uv_bot_7dm,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
@@ -167,34 +167,34 @@ temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(ts
 ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
-sstrat_breaks <- pretty(sal_strat_7dm[which(sal_strat_7dm<=quantile(sal_strat_7dm,quant,na.rm=T))],n=20)
-if(any(sstrat_breaks==0)){
-  limit <- mean(abs(range(sal_strat_7dm,na.rm=T)))
-  sal_strat_7dm[which(sal_strat_7dm<(-limit))] <- -limit
-  sal_strat_7dm[which(sal_strat_7dm>limit)] <- limit
-  sstrat_breaks <- pretty(sal_strat_7dm,n=20)
-  sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
-                   strat_p_col(length(which(sstrat_breaks>0))))
-}else{
-  sstrat_cols <- rev(strat_p_col(length(sstrat_breaks)-1))  
-  sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
-  sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
-}
-# sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
-# sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
-tstrat_breaks <- pretty(temp_strat_7dm[which(temp_strat_7dm<=quantile(temp_strat_7dm,quant,na.rm=T))],n=20)
-if(any(tstrat_breaks==0)){
-  limit <- mean(abs(range(temp_strat_7dm,na.rm=T)))
-  temp_strat_7dm[which(temp_strat_7dm<(-limit))] <- -limit
-  temp_strat_7dm[which(temp_strat_7dm>limit)] <- limit
-  tstrat_breaks <- pretty(temp_strat_7dm,n=20)
-  tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
-                   strat_p_col(length(which(tstrat_breaks>0))))
-}else{
-  tstrat_cols <- strat_n_col(length(tstrat_breaks)-1)
-  temp_strat_7dm[which(temp_strat_7dm>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
-  temp_strat_7dm[which(temp_strat_7dm<tstrat_breaks[1])] <- tstrat_breaks[1]
-}
+# # sstrat_breaks <- pretty(sal_strat_7dm[which(sal_strat_7dm<=quantile(sal_strat_7dm,quant,na.rm=T))],n=20)
+# if(any(sstrat_breaks==0)){
+#   limit <- mean(abs(range(sal_strat_7dm,na.rm=T)))
+#   sal_strat_7dm[which(sal_strat_7dm<(-limit))] <- -limit
+#   sal_strat_7dm[which(sal_strat_7dm>limit)] <- limit
+#   sstrat_breaks <- pretty(sal_strat_7dm,n=20)
+#   sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
+#                    strat_p_col(length(which(sstrat_breaks>0))))
+# }else{
+#   sstrat_cols <- rev(strat_p_col(length(sstrat_breaks)-1))  
+#   sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+#   sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
+# }
+# # sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+# # sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
+# tstrat_breaks <- pretty(temp_strat_7dm[which(temp_strat_7dm<=quantile(temp_strat_7dm,quant,na.rm=T))],n=20)
+# if(any(tstrat_breaks==0)){
+#   limit <- mean(abs(range(temp_strat_7dm,na.rm=T)))
+#   temp_strat_7dm[which(temp_strat_7dm<(-limit))] <- -limit
+#   temp_strat_7dm[which(temp_strat_7dm>limit)] <- limit
+#   tstrat_breaks <- pretty(temp_strat_7dm,n=20)
+#   tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
+#                    strat_p_col(length(which(tstrat_breaks>0))))
+# }else{
+#   tstrat_cols <- strat_n_col(length(tstrat_breaks)-1)
+#   temp_strat_7dm[which(temp_strat_7dm>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
+#   temp_strat_7dm[which(temp_strat_7dm<tstrat_breaks[1])] <- tstrat_breaks[1]
+# }
 # temp_strat_7dm[which(temp_strat_7dm>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
 # temp_strat_7dm[which(temp_strat_7dm<tstrat_breaks[1])] <- tstrat_breaks[1]
 
@@ -202,8 +202,8 @@ if(any(tstrat_breaks==0)){
 sal_lm <- sal_p <- matrix(NA,length(ind_lon),length(ind_lat))
 for(i in 1:length(ind_lon)){
   for(j in 1:length(ind_lat)){
-    if(all(!is.na(sal_bot[i,j,]))){
-      res <- lm(sal_bot[i,j,]~c(1:dim(sal_bot)[3]))
+    if(all(!is.na(sal_bot_7dm[i,j,]))){
+      res <- lm(sal_bot_7dm[i,j,]~c(1:dim(sal_bot_7dm)[3]))
       sal_lm[i,j] <- coefficients(summary(res))[2]
       sal_p[i,j] <- coefficients(summary(res))[8]
     }
@@ -224,8 +224,8 @@ sal_lm2[which(sal_p>.1)] <- NA
 temp_lm <- temp_p <- matrix(NA,length(ind_lon),length(ind_lat))
 for(i in 1:length(ind_lon)){
   for(j in 1:length(ind_lat)){
-    if(all(!is.na(temp_bot[i,j,]))){
-      res <- lm(temp_bot[i,j,]~c(1:dim(temp_bot)[3]))
+    if(all(!is.na(temp_bot_7dm[i,j,]))){
+      res <- lm(temp_bot_7dm[i,j,]~c(1:dim(temp_bot_7dm)[3]))
       temp_lm[i,j] <- coefficients(summary(res))[2]
       temp_p[i,j] <- coefficients(summary(res))[8]
     }
@@ -268,10 +268,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
+       lonlat$lon+as.vector(u_bot_7dms),
+       lonlat$lat+as.vector(v_bot_7dms),
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
@@ -288,10 +288,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
+       lonlat$lon+as.vector(u_bot_7dms),
+       lonlat$lat+as.vector(v_bot_7dms),
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
@@ -313,10 +313,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
+       lonlat$lon+as.vector(u_bot_7dms),
+       lonlat$lat+as.vector(v_bot_7dms),
        length = .025,
-       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+       col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
@@ -333,10 +333,10 @@ imagePlot(lon[ind_lon]-360,
 plot(world,col='gray70',add=T)
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot),
-       lonlat$lat+as.vector(v_bot),
+       lonlat$lon+as.vector(u_bot_7dms),
+       lonlat$lat+as.vector(v_bot_7dms),
        length = .025,
-       col=alpha('gray50',(as.vector(uv_bot_sub)/max(uv_bot_sub,na.rm=T))))
+       col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
