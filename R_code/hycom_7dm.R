@@ -1,58 +1,58 @@
-rm(list=ls())
-gc()
-
-library(fields)
-library(ncdf4)
-library(raster)
-library(rgdal)
-library(scales)
-
-
-setwd("~/Desktop/professional/biblioteca/data")
-bathy <- nc_open('etopo1.nc')
-topo <- ncvar_get(bathy, 'Band1')
-topo_lat <- ncvar_get(bathy, 'lat')
-topo_lon <- ncvar_get(bathy, 'lon')
-nc_close(bathy)
-
-################## geographic scope
-lonbox_e <- -80 ### Florida Bay
-lonbox_w <- -87 ### mouth of Mississippi River
-latbox_n <- 31 ### northern coast
-latbox_s <- 24 ### remove the Keys
-
-ind_lat <- which(topo_lat<latbox_n & topo_lat>latbox_s)
-ind_lon <- which(topo_lon<lonbox_e & topo_lon>lonbox_w)
-
-topo_lat <- topo_lat[ind_lat]
-topo_lon <- topo_lon[ind_lon]
-topo <- topo[ind_lon,ind_lat]
-
-### load map
-setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_shp/h/")
-world <- readOGR('GSHHS_h_L1.shp')
-world <- crop(world, extent(-87, -79, 24, 31))
-
-### colorpalettes
-### breaks and colors
-temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
-sal_col <- colorRampPalette(c('midnightblue','dodgerblue4','seagreen3','khaki1'))
-uv_col <- colorRampPalette(c('white','thistle1','purple2'))
-# lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
-# lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
-lm_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
-lm_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
-col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
-strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'))
-strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')))
-
-################## geogrpahic scope
-lonbox_e <- -80.5 ### Florida Bay
-lonbox_e <- (lonbox_e + 360)
-lonbox_w <- -86 ### mouth of Mississippi River
-lonbox_w <- (lonbox_w + 360)
-latbox_n <- 30.5 ### northern coast
-latbox_s <- 24.5 ### remove the Keys
+# rm(list=ls())
+# gc()
+# 
+# library(fields)
+# library(ncdf4)
+# library(raster)
+# library(rgdal)
+# library(scales)
+# 
+# 
+# setwd("~/Desktop/professional/biblioteca/data")
+# bathy <- nc_open('etopo1.nc')
+# topo <- ncvar_get(bathy, 'Band1')
+# topo_lat <- ncvar_get(bathy, 'lat')
+# topo_lon <- ncvar_get(bathy, 'lon')
+# nc_close(bathy)
+# 
+# ################## geographic scope
+# lonbox_e <- -80 ### Florida Bay
+# lonbox_w <- -87 ### mouth of Mississippi River
+# latbox_n <- 31 ### northern coast
+# latbox_s <- 24 ### remove the Keys
+# 
+# ind_lat <- which(topo_lat<latbox_n & topo_lat>latbox_s)
+# ind_lon <- which(topo_lon<lonbox_e & topo_lon>lonbox_w)
+# 
+# topo_lat <- topo_lat[ind_lat]
+# topo_lon <- topo_lon[ind_lon]
+# topo <- topo[ind_lon,ind_lat]
+# 
+# ### load map
+# setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_shp/h/")
+# world <- readOGR('GSHHS_h_L1.shp')
+# world <- crop(world, extent(-87, -79, 24, 31))
+# 
+# ### colorpalettes
+# ### breaks and colors
+# temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
+# sal_col <- colorRampPalette(c('midnightblue','dodgerblue4','seagreen3','khaki1'))
+# uv_col <- colorRampPalette(c('white','thistle1','purple2'))
+# # lm_neg <- colorRampPalette(c(1,'dodgerblue4','lightskyblue1','white'))
+# # lm_pos <- colorRampPalette(c('white','mistyrose2','firebrick3'))
+# lm_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
+# lm_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
+# col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
+# strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'))
+# strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')))
+# 
+# ################## geogrpahic scope
+# lonbox_e <- -80.5 ### Florida Bay
+# lonbox_e <- (lonbox_e + 360)
+# lonbox_w <- -86 ### mouth of Mississippi River
+# lonbox_w <- (lonbox_w + 360)
+# latbox_n <- 30.5 ### northern coast
+# latbox_s <- 24.5 ### remove the Keys
 
 # https://tds.hycom.org/thredds/catalogs/GLBy0.08/expt_93.0.html
 ### now
@@ -139,26 +139,8 @@ uv_bot_7dm_sub <- uv_bot_7dm[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
 nc_close(data)
 
 
-### bathymetry
-b_url <- 'https://tds.hycom.org/thredds/dodsC/datasets/GLBy0.08/expt_93.0/topo/depth_GLBy0.08_09m11.nc'
-data <- nc_open(b_url)
-bathy <- ncvar_get(data,'bathymetry',
-                   start=c(ind_lon[1],ind_lat[1],1),
-                   count=c(length(ind_lon),length(ind_lat),1))
-nc_close(data)
-
-# sal_strat_7dm <- (sal_bot_7dm-sal_surf_7dm)/bathy
-# temp_strat_7dm <- (temp_bot_7dm-temp_surf_7dm)/bathy
-
 ### breaks and colors
 quant <- .99
-sal_breaks <- pretty(sal_bot_7dm,n=20)
-sal_cols <- sal_col(length(sal_breaks)-1)
-temp_bot_7dm[which(temp_bot_7dm<10)] <- 10
-temp_breaks <- pretty(temp_bot_7dm,n=20)
-temp_cols <- temp_col(length(temp_breaks)-1)
-uv_breaks <- pretty(uv_surf_7dm,n=20)
-uv_cols <- uv_col(length(uv_breaks)-1)
 uv_breaks2 <- pretty(uv_bot_7dm,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
 tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
@@ -167,36 +149,7 @@ temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(ts
 ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
-# # sstrat_breaks <- pretty(sal_strat_7dm[which(sal_strat_7dm<=quantile(sal_strat_7dm,quant,na.rm=T))],n=20)
-# if(any(sstrat_breaks==0)){
-#   limit <- mean(abs(range(sal_strat_7dm,na.rm=T)))
-#   sal_strat_7dm[which(sal_strat_7dm<(-limit))] <- -limit
-#   sal_strat_7dm[which(sal_strat_7dm>limit)] <- limit
-#   sstrat_breaks <- pretty(sal_strat_7dm,n=20)
-#   sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
-#                    strat_p_col(length(which(sstrat_breaks>0))))
-# }else{
-#   sstrat_cols <- rev(strat_p_col(length(sstrat_breaks)-1))  
-#   sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
-#   sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
-# }
-# # sal_strat_7dm[which(sal_strat_7dm>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
-# # sal_strat_7dm[which(sal_strat_7dm<sstrat_breaks[1])] <- sstrat_breaks[1]
-# tstrat_breaks <- pretty(temp_strat_7dm[which(temp_strat_7dm<=quantile(temp_strat_7dm,quant,na.rm=T))],n=20)
-# if(any(tstrat_breaks==0)){
-#   limit <- mean(abs(range(temp_strat_7dm,na.rm=T)))
-#   temp_strat_7dm[which(temp_strat_7dm<(-limit))] <- -limit
-#   temp_strat_7dm[which(temp_strat_7dm>limit)] <- limit
-#   tstrat_breaks <- pretty(temp_strat_7dm,n=20)
-#   tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
-#                    strat_p_col(length(which(tstrat_breaks>0))))
-# }else{
-#   tstrat_cols <- strat_n_col(length(tstrat_breaks)-1)
-#   temp_strat_7dm[which(temp_strat_7dm>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
-#   temp_strat_7dm[which(temp_strat_7dm<tstrat_breaks[1])] <- tstrat_breaks[1]
-# }
-# temp_strat_7dm[which(temp_strat_7dm>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
-# temp_strat_7dm[which(temp_strat_7dm<tstrat_breaks[1])] <- tstrat_breaks[1]
+
 
 ### 7 day linear trend
 sal_lm <- sal_p <- matrix(NA,length(ind_lon),length(ind_lat))
