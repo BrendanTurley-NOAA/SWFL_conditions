@@ -353,19 +353,19 @@ mtext(paste('Processed: ',as.Date(Sys.time())),
 dev.off()
 
 ### stratification colorbar explanation
-strat_ex <- seq(-.3,.3,.01)
-strat_exm <- cbind(strat_ex,strat_ex)
-exp_breaks <- pretty(strat_ex,n=10)
-
-exp_cols <- c(strat_n_col(length(which(exp_breaks<0))),
-              strat_p_col(length(which(exp_breaks>0))))
-
-png('stratification_example.png',width=5,height=2,units='in',res=300)
-par(mar=c(4.5,1,4,1))
-image(strat_exm,
-      breaks=exp_breaks,
-      col=exp_cols,
-      xaxt='n',yaxt='n')
-mtext('warmer surface or\nsaltier surface',adj=0)
-mtext('cooler surface or\nfresher surface',adj=1)
-dev.off()
+# strat_ex <- seq(-.3,.3,.01)
+# strat_exm <- cbind(strat_ex,strat_ex)
+# exp_breaks <- pretty(strat_ex,n=10)
+# 
+# exp_cols <- c(strat_n_col(length(which(exp_breaks<0))),
+#               strat_p_col(length(which(exp_breaks>0))))
+# 
+# png('stratification_example.png',width=5,height=2,units='in',res=300)
+# par(mar=c(4.5,1,4,1))
+# image(strat_exm,
+#       breaks=exp_breaks,
+#       col=exp_cols,
+#       xaxt='n',yaxt='n')
+# mtext('warmer surface or\nsaltier surface',adj=0)
+# mtext('cooler surface or\nfresher surface',adj=1)
+# dev.off()
