@@ -193,8 +193,9 @@ uv_bot_breaks <- pretty(uv_bot_now,n=20)
 uv_bot_cols <- uv_col(length(uv_bot_breaks)-1)
 
 ### stratification
-sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
-if(any(sstrat_breaks==0)){
+# sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
+sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T) & sal_strat_now>=quantile(sal_strat_now,.01,na.rm=T))],n=20)
+if(any(sstrat_breaks==0) & sstrat_breaks[1]!=0 & sstrat_breaks[length(sstrat_breaks)]!=0){
   limit <- mean(abs(range(sal_strat_now,na.rm=T)))
   sal_strat_now[which(sal_strat_now<(-limit))] <- -limit
   sal_strat_now[which(sal_strat_now>limit)] <- limit
@@ -206,8 +207,9 @@ if(any(sstrat_breaks==0)){
   sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
   sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
 }
-tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
-if(any(tstrat_breaks==0)){
+# tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
+tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T) & temp_strat_now>=quantile(temp_strat_now,.01,na.rm=T))],n=20)
+if(any(tstrat_breaks==0) & tstrat_breaks[1]!=0 & tstrat_breaks[length(tstrat_breaks)]!=0){
   limit <- mean(abs(range(temp_strat_now,na.rm=T)))
   temp_strat_now[which(temp_strat_now<(-limit))] <- -limit
   temp_strat_now[which(temp_strat_now>limit)] <- limit
