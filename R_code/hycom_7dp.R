@@ -142,12 +142,12 @@ nc_close(data)
 
 ### breaks and colors
 quant <- .99
-uv_breaks2 <- pretty(uv_bot_7dp,n=20)
+uv_breaks2 <- pretty(uv_bot_7dp,n=30)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
-tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=30)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
 temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(tsd_breaks)]
-ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=30)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 

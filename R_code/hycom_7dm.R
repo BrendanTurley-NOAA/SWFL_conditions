@@ -143,10 +143,10 @@ nc_close(data)
 quant <- .99
 uv_breaks2 <- pretty(uv_bot_7dm,n=20)
 uv_cols2 <- uv_col(length(uv_breaks2)-1)
-tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=20)
+tsd_breaks <- pretty(temp_bsd[which(temp_bsd<=quantile(temp_bsd,quant,na.rm=T))],n=30)
 tsd_cols <- col_sd(length(tsd_breaks)-1)
 temp_bsd[which(temp_bsd>tsd_breaks[length(tsd_breaks)])] <- tsd_breaks[length(tsd_breaks)]
-ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=20)
+ssd_breaks <- pretty(sal_bsd[which(sal_bsd<=quantile(sal_bsd,quant,na.rm=T))],n=30)
 ssd_cols <- col_sd(length(ssd_breaks)-1)
 sal_bsd[which(sal_bsd>ssd_breaks[length(ssd_breaks)])] <- ssd_breaks[length(ssd_breaks)]
 
@@ -198,12 +198,12 @@ temp_lm2[which(temp_p>.1)] <- NA
 
 ### breaks and colors
 # sal_lm_brks <- seq(-.05,.05,.005)
-sal_lm_brks <- pretty(sal_lm,20)
+sal_lm_brks <- pretty(sal_lm,30)
 sal_lm_cols <- c(lm_neg(length(which(sal_lm_brks<0))),
                  lm_pos(length(which(sal_lm_brks>0))))
 
 # temp_lm_brks <- seq(-.05,.05,.005)
-temp_lm_brks <- pretty(temp_lm,20)
+temp_lm_brks <- pretty(temp_lm,30)
 temp_lm_cols <- c(lm_neg(length(which(temp_lm_brks<0))),
                   lm_pos(length(which(temp_lm_brks>0))))
 
