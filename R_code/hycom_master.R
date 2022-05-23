@@ -62,6 +62,9 @@ bathy <- ncvar_get(data,'bathymetry',
                    count=c(length(ind_lon),length(ind_lat),1))
 nc_close(data)
 
+### 48-hour mean conditions
 source("~/Documents/R/Github/SWFL_conditions/R_code/hycom_now.R", echo=TRUE)
+### past 7-day conditions
 source("~/Documents/R/Github/SWFL_conditions/R_code/hycom_7dm.R", echo=TRUE)
+### forecasted 7-day conditions
 source("~/Documents/R/Github/SWFL_conditions/R_code/hycom_7dp.R", echo=TRUE)
