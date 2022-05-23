@@ -1,4 +1,4 @@
-
+library(fields)
 library(ncdf4)
 
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
@@ -6,7 +6,7 @@ anom_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gra
 anom_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
 
 ################## geogrpahic scope
-lonbox_e <- -75 ### Florida Bay
+lonbox_e <- -79 ### Florida Bay
 lonbox_e <- (lonbox_e + 360)
 lonbox_w <- -99 ### mouth of Mississippi River
 lonbox_w <- (lonbox_w + 360)
@@ -17,6 +17,8 @@ url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/2022
 data <- nc_open(url)
 
 time <- ncvar_get(data,'time')
+time2 <- as.Date(time,origin='1978-01-01 12:00:00')
+
 z <- ncvar_get(data,'zlev')
 
 lat <- ncvar_get(data,'lat')
@@ -37,7 +39,7 @@ anom <- ncvar_get(data,'anom',
 nc_close(data)
 
 ### breaks and colors
-# surface
+# sst
 sst_brks <- pretty(sst,n=30)
 sst_cols <- temp_col(length(sst_brks)-1)
 # anom
@@ -47,14 +49,26 @@ anom[which(anom<(-2))] <- -2
 anom[which(anom>2)] <- 2
 
 anom_cols <- c(anom_neg(length(which(anom_brks<0))),
-                 anom_pos(length(which(anom_brks>0))))
+               anom_pos(length(which(anom_brks>0))))
 
-image(lon[ind_lon]-360,
-      lat[ind_lat],
-      sst,
-      asp=1,breaks=sst_brks,col=sst_cols)
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          sst,
+          asp=1,breaks=sst_brks,col=sst_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(sst_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('Surface Temperature (',degree,'C)')),adj=1)
 
-image(lon[ind_lon]-360,
-      lat[ind_lat],
-      anom,
-      asp=1,breaks=anom_brks,col=anom_cols)
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          anom,
+          asp=1,breaks=anom_brks,col=anom_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(anom_cols),legend.mar=5)
+plot(world,col='gray70',add=T)
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
+mtext(expression(paste('Surface Temperature Anomaly (',degree,'C)')),adj=1)
