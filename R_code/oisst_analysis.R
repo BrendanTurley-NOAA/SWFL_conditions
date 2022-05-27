@@ -13,6 +13,7 @@ lonbox_w <- (lonbox_w + 360)
 latbox_n <- 31 ### northern coast
 latbox_s <- 17.5 ### remove the Keys
 
+### https://www.ncei.noaa.gov/products/optimum-interpolation-sst
 url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/202205/oisst-avhrr-v02r01.20220522_preliminary.nc'
 data <- nc_open(url)
 
