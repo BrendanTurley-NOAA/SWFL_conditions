@@ -71,8 +71,8 @@ ind_lat <- which(lat>=latbox_s & lat<=latbox_n)
 lon <- ncvar_get(data,'lon')
 ind_lon <- which(lon>=lonbox_w & lon<=lonbox_e)
 ### for uv plotting subsample
-lons <- lon[ind_lon[seq(1,length(ind_lon),2)]]-360
-lats <- lat[ind_lat[seq(1,length(ind_lat),2)]]
+lons <- lon[ind_lon[seq(1,length(ind_lon),3)]]-360
+lats <- lat[ind_lat[seq(1,length(ind_lat),3)]]
 lonlat <- expand.grid(lons,lats)
 names(lonlat) <- c('lon','lat')
 
@@ -120,9 +120,9 @@ v_surf_7dp <- ncvar_get(data,'water_v',
                         count=c(length(ind_lon),length(ind_lat),1,1+n))
 v_surf_7dp <- apply(v_surf_7dp,c(1,2),mean,na.rm=T)
 uv_surf_7dp <- sqrt(u_surf_7dp^2 + v_surf_7dp^2)
-u_surf_7dps <- u_surf_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-v_surf_7dps <- v_surf_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-uv_surf_7dp_sub <- uv_surf_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+u_surf_7dps <- u_surf_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+v_surf_7dps <- v_surf_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+uv_surf_7dp_sub <- uv_surf_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
 # bottom
 u_bot_7dp <- ncvar_get(data,'water_u_bottom',
                        start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -133,9 +133,9 @@ v_bot_7dp <- ncvar_get(data,'water_v_bottom',
                        count=c(length(ind_lon),length(ind_lat),1+n))
 v_bot_7dp <- apply(v_bot_7dp,c(1,2),mean,na.rm=T)
 uv_bot_7dp <- sqrt(u_bot_7dp^2 + v_bot_7dp^2)
-u_bot_7dps <- u_bot_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-v_bot_7dps <- v_bot_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-uv_bot_7dp_sub <- uv_bot_7dp[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+u_bot_7dps <- u_bot_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+v_bot_7dps <- v_bot_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+uv_bot_7dp_sub <- uv_bot_7dp[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
 
 nc_close(data)
 

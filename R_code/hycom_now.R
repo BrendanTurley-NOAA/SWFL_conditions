@@ -68,8 +68,8 @@ ind_lat <- which(lat>=latbox_s & lat<=latbox_n)
 lon <- ncvar_get(data,'lon')
 ind_lon <- which(lon>=lonbox_w & lon<=lonbox_e)
 ### for uv plotting subsample
-lons <- lon[ind_lon[seq(1,length(ind_lon),2)]]-360
-lats <- lat[ind_lat[seq(1,length(ind_lat),2)]]
+lons <- lon[ind_lon[seq(1,length(ind_lon),3)]]-360
+lats <- lat[ind_lat[seq(1,length(ind_lat),3)]]
 lonlat <- expand.grid(lons,lats)
 names(lonlat) <- c('lon','lat')
 
@@ -124,9 +124,9 @@ v_surf_now <- ncvar_get(data,'water_v',
                        count=c(length(ind_lon),length(ind_lat),1,1+n))
 v_surf_now <- apply(v_surf_now,c(1,2),mean,na.rm=T)
 uv_surf_now <- sqrt(u_surf_now^2 + v_surf_now^2)
-u_surf_nows <- u_surf_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-v_surf_nows <- v_surf_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-uv_surf_now_sub <- uv_surf_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+u_surf_nows <- u_surf_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+v_surf_nows <- v_surf_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+uv_surf_now_sub <- uv_surf_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
 # bottom
 u_bot_now <- ncvar_get(data,'water_u_bottom',
                    start=c(ind_lon[1],ind_lat[1],length(time)-n),
@@ -137,9 +137,9 @@ v_bot_now <- ncvar_get(data,'water_v_bottom',
                    count=c(length(ind_lon),length(ind_lat),1+n))
 v_bot_now <- apply(v_bot_now,c(1,2),mean,na.rm=T)
 uv_bot_now <- sqrt(u_bot_now^2 + v_bot_now^2)
-u_bot_nows <- u_bot_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-v_bot_nows <- v_bot_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
-uv_bot_now_sub <- uv_bot_now[seq(1,length(ind_lon),2),seq(1,length(ind_lat),2)]
+u_bot_nows <- u_bot_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+v_bot_nows <- v_bot_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
+uv_bot_now_sub <- uv_bot_now[seq(1,length(ind_lon),3),seq(1,length(ind_lat),3)]
 
 nc_close(data)
 
@@ -196,10 +196,12 @@ uv_bot_cols <- uv_col(length(uv_bot_breaks)-1)
 # sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T))],n=20)
 sstrat_breaks <- pretty(sal_strat_now[which(sal_strat_now<=quantile(sal_strat_now,quant,na.rm=T) & sal_strat_now>=quantile(sal_strat_now,.01,na.rm=T))],n=30)
 if(any(sstrat_breaks==0) & sstrat_breaks[1]!=0 & sstrat_breaks[length(sstrat_breaks)]!=0){
-  limit <- mean(abs(range(sal_strat_now,na.rm=T)))
-  sal_strat_now[which(sal_strat_now<(-limit))] <- -limit
-  sal_strat_now[which(sal_strat_now>limit)] <- limit
-  sstrat_breaks <- pretty(sal_strat_now,n=30)
+  # limit <- mean(abs(range(sal_strat_now,na.rm=T)))
+  # sal_strat_now[which(sal_strat_now<(-limit))] <- -limit
+  # sal_strat_now[which(sal_strat_now>limit)] <- limit
+  # sstrat_breaks <- pretty(sal_strat_now,n=30)
+  sal_strat_now[which(sal_strat_now>sstrat_breaks[length(sstrat_breaks)])] <- sstrat_breaks[length(sstrat_breaks)]
+  sal_strat_now[which(sal_strat_now<sstrat_breaks[1])] <- sstrat_breaks[1]
   sstrat_cols <- c(strat_n_col(length(which(sstrat_breaks<0))),
                    strat_p_col(length(which(sstrat_breaks>0))))
 }else{
@@ -210,9 +212,11 @@ if(any(sstrat_breaks==0) & sstrat_breaks[1]!=0 & sstrat_breaks[length(sstrat_bre
 # tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T))],n=20)
 tstrat_breaks <- pretty(temp_strat_now[which(temp_strat_now<=quantile(temp_strat_now,quant,na.rm=T) & temp_strat_now>=quantile(temp_strat_now,.01,na.rm=T))],n=30)
 if(any(tstrat_breaks==0) & tstrat_breaks[1]!=0 & tstrat_breaks[length(tstrat_breaks)]!=0){
-  limit <- mean(abs(range(temp_strat_now,na.rm=T)))
-  temp_strat_now[which(temp_strat_now<(-limit))] <- -limit
-  temp_strat_now[which(temp_strat_now>limit)] <- limit
+  # limit <- mean(abs(range(temp_strat_now,na.rm=T)))
+  # temp_strat_now[which(temp_strat_now<(-limit))] <- -limit
+  # temp_strat_now[which(temp_strat_now>limit)] <- limit
+  temp_strat_now[which(temp_strat_now>tstrat_breaks[length(tstrat_breaks)])] <- tstrat_breaks[length(tstrat_breaks)]
+  temp_strat_now[which(temp_strat_now<tstrat_breaks[1])] <- tstrat_breaks[1]
   tstrat_breaks <- pretty(temp_strat_now,n=30)
   tstrat_cols <- c(strat_n_col(length(which(tstrat_breaks<0))),
                    strat_p_col(length(which(tstrat_breaks>0))))

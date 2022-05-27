@@ -43,8 +43,8 @@ uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 lm_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
 lm_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
 col_sd <- colorRampPalette(c('gray20','dodgerblue4','indianred3','gold1'))
-strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'))
-strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')))
+strat_n_col <- colorRampPalette(c('purple4','purple2','orchid1','gray90'),interpolate='spline',bias=.9)
+strat_p_col <- colorRampPalette(rev(c('darkgreen','green3','palegreen2','gray90')),interpolate='spline',bias=.9)
 
 ################## geogrpahic scope
 lonbox_e <- -80.5 ### Florida Bay
