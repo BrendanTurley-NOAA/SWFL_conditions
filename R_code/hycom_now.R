@@ -236,10 +236,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(temp_surf_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_surf_nows)/2,
+#        lonlat$lat+as.vector(v_surf_nows)/2,
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_surf_nows)/2,
-       lonlat$lat+as.vector(v_surf_nows)/2,
+       lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
@@ -254,10 +260,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(sal_surf_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_surf_nows)/2,
+#        lonlat$lat+as.vector(v_surf_nows)/2,
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_surf_nows)/2,
-       lonlat$lat+as.vector(v_surf_nows)/2,
+       lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
@@ -278,10 +290,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(temp_bot_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_nows),
+#        lonlat$lat+as.vector(v_bot_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_nows),
-       lonlat$lat+as.vector(v_bot_nows),
+       lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
+       lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
@@ -296,10 +314,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(sal_bot_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_nows),
+#        lonlat$lat+as.vector(v_bot_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_nows),
-       lonlat$lat+as.vector(v_bot_nows),
+       lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
+       lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
@@ -322,10 +346,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(temp_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_surf_nows),
+#        lonlat$lat+as.vector(v_surf_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_surf_nows),
-       lonlat$lat+as.vector(v_surf_nows),
+       lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
@@ -342,10 +372,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(sal_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_surf_nows),
+#        lonlat$lat+as.vector(v_surf_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_surf_nows),
-       lonlat$lat+as.vector(v_surf_nows),
+       lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,

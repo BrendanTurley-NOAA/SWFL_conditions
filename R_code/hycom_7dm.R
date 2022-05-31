@@ -219,10 +219,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(temp_lm_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_7dms),
+#        lonlat$lat+as.vector(v_bot_7dms),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_7dms),
-       lonlat$lat+as.vector(v_bot_7dms),
+       lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
+       lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
@@ -239,10 +245,16 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(sal_lm_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_7dms),
+#        lonlat$lat+as.vector(v_bot_7dms),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_7dms),
-       lonlat$lat+as.vector(v_bot_7dms),
+       lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
+       lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
@@ -264,12 +276,18 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(tsd_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_7dms),
+#        lonlat$lat+as.vector(v_bot_7dms),
+#        length = .025,
+#        col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_7dms),
-       lonlat$lat+as.vector(v_bot_7dms),
+       lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
+       lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
@@ -284,12 +302,18 @@ imagePlot(lon[ind_lon]-360,
           xlab='',ylab='',las=1,
           nlevel=length(ssd_cols),legend.mar=5)
 plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_7dms),
+#        lonlat$lat+as.vector(v_bot_7dms),
+#        length = .025,
+#        col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 arrows(lonlat$lon,
        lonlat$lat,
-       lonlat$lon+as.vector(u_bot_7dms),
-       lonlat$lat+as.vector(v_bot_7dms),
+       lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
+       lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha('gray50',(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
