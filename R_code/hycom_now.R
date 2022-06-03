@@ -250,6 +250,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('Surface Temperature (',degree,'C)')),adj=1)
@@ -274,6 +276,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('Surface Salinity (PSU)',adj=1)
@@ -304,6 +308,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('Bottom Temperature (',degree,'C)')),adj=1)
@@ -328,6 +334,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('Bottom Salinity (PSU)',adj=1)
@@ -360,6 +368,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 # mtext(expression(paste('Temperature stratification (',degree,'C m'^-1,')')),adj=1)
@@ -386,6 +396,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 # mtext(expression(paste('Salinity stratification (PSU m'^-1,')')),adj=1)
@@ -411,3 +423,51 @@ dev.off()
 # mtext('warmer surface or\nsaltier surface',adj=0)
 # mtext('cooler surface or\nfresher surface',adj=1)
 # dev.off()
+
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          uv_surf_now,
+          asp=1,
+          xlab='',ylab='',las=1,
+          legend.mar=5)
+plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_surf_nows),
+#        lonlat$lat+as.vector(v_surf_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
+       length = .025,
+       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+
+imagePlot(lon[ind_lon]-360,
+          lat[ind_lat],
+          uv_bot_now,
+          asp=1,
+          xlab='',ylab='',las=1,
+          legend.mar=5)
+plot(world,col='gray70',add=T)
+# arrows(lonlat$lon,
+#        lonlat$lat,
+#        lonlat$lon+as.vector(u_bot_nows),
+#        lonlat$lat+as.vector(v_bot_nows),
+#        length = .025,
+#        col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
+       lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
+       length = .025,
+       col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
+

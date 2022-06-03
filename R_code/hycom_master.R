@@ -35,6 +35,11 @@ setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_s
 world <- readOGR('GSHHS_h_L1.shp')
 world <- crop(world, extent(-87, -79, 24, 31))
 
+### FL cities
+setwd("~/Desktop/professional/projects/postdoc_FL/data/")
+fl <- read.csv('fl_cities.csv')
+fl <- fl[-seq(2,6,2),]
+
 ### colorpalettes
 ### breaks and colors
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))

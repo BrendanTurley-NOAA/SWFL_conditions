@@ -233,7 +233,10 @@ arrows(lonlat$lon,
        lonlat$lat+as.vector(v_bot_7dps)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_7dp_sub)/max(uv_bot_7dp_sub,na.rm=T))))
-contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day change in bottom Temperature (',degree,'C)')),adj=1)
@@ -259,7 +262,10 @@ arrows(lonlat$lon,
        lonlat$lat+as.vector(v_bot_7dps)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
        col=alpha(1,(as.vector(uv_bot_7dp_sub)/max(uv_bot_7dp_sub,na.rm=T))))
-contour(topo_lon,topo_lat,topo,add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+contour(topo_lon,topo_lat,topo,
+        add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day change in bottom Salinity (PSU)',adj=1)
@@ -292,6 +298,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_bot_7dp_sub)/max(uv_bot_7dp_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('7-day Bottom Temperature (',degree,'C) standard deviation')),adj=1)
@@ -318,6 +326,8 @@ arrows(lonlat$lon,
        col=alpha(1,(as.vector(uv_bot_7dp_sub)/max(uv_bot_7dp_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
+points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
+text(fl$longitude,fl$latitude,fl$name,cex=.65,pos=4)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 # mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext('7-day Bottom Salinity (PSU) standard deviation',adj=1)
