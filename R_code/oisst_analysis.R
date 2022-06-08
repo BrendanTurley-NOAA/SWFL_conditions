@@ -69,6 +69,16 @@ v <- ncvar_get(data,'v',
 nc_close(data)
 
 uv <- sqrt(u^2 + v^2)
+lonlat <- expand.grid(lon2[ind_lon2],rev(lat2[ind_lat2]))
+names(lonlat) <- c('lon','lat')
+
+imagePlot(lon2[ind_lon2]-360,
+          rev(lat2[ind_lat2]),
+          uv[,ncol(uv):1])
+arrows(lon2[ind_lon2]-360,
+       lat2[ind_lat2],
+       lonlat$lon+as.vector(u),
+       lonlat$lat+as.vector(v))
 
 ### breaks and colors
 # sst
@@ -89,7 +99,10 @@ imagePlot(lon[ind_lon]-360,
           asp=1,breaks=sst_brks,col=sst_cols,
           xlab='',ylab='',las=1,
           nlevel=length(sst_cols),legend.mar=5)
-arrows(lon)
+arrows(lon2[ind_lon2]-360,
+       lat2[ind_lat2],
+       lonlat$lon+as.vector(u)/abs(as.vector(uv))/10,
+       lonlat$lat+as.vector(v)/abs(as.vector(uv))/10)
 plot(world,col='gray70',add=T)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
