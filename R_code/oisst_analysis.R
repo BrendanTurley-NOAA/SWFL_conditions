@@ -2,6 +2,7 @@
 library(fields)
 library(lubridate)
 library(ncdf4)
+library(scales)
 
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
 anom_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
@@ -61,24 +62,28 @@ ind_lon2 <- ind_lon2-1
 u <- ncvar_get(data,'u',
                  start=c(ind_lon2[1],ind_lat2[1],1,1),
                  count=c(length(ind_lon2),length(ind_lat2),1,1))
+u <- u[,ncol(u):1]
 
 v <- ncvar_get(data,'v',
                   start=c(ind_lon2[1],ind_lat2[1],1,1),
                   count=c(length(ind_lon2),length(ind_lat2),1,1))
+v <- v[,ncol(v):1]
 
 nc_close(data)
 
 uv <- sqrt(u^2 + v^2)
-lonlat <- expand.grid(lon2[ind_lon2],rev(lat2[ind_lat2]))
+lonlat <- expand.grid(lon2[ind_lon2]-360,rev(lat2[ind_lat2]))
 names(lonlat) <- c('lon','lat')
 
 imagePlot(lon2[ind_lon2]-360,
           rev(lat2[ind_lat2]),
-          uv[,ncol(uv):1])
-arrows(lon2[ind_lon2]-360,
-       lat2[ind_lat2],
-       lonlat$lon+as.vector(u),
-       lonlat$lat+as.vector(v))
+          uv)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u)/abs(as.vector(uv))/5,
+       lonlat$lat+as.vector(v)/abs(as.vector(uv))/5,
+       length = .025,
+       col=alpha(1,(as.vector(uv)/max(uv,na.rm=T))))
 
 ### breaks and colors
 # sst
@@ -99,10 +104,12 @@ imagePlot(lon[ind_lon]-360,
           asp=1,breaks=sst_brks,col=sst_cols,
           xlab='',ylab='',las=1,
           nlevel=length(sst_cols),legend.mar=5)
-arrows(lon2[ind_lon2]-360,
-       lat2[ind_lat2],
-       lonlat$lon+as.vector(u)/abs(as.vector(uv))/10,
-       lonlat$lat+as.vector(v)/abs(as.vector(uv))/10)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u)/abs(as.vector(uv))/5,
+       lonlat$lat+as.vector(v)/abs(as.vector(uv))/5,
+       length = .025,
+       col=alpha(1,(as.vector(uv)/max(uv,na.rm=T))))
 plot(world,col='gray70',add=T)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
@@ -114,6 +121,12 @@ imagePlot(lon[ind_lon]-360,
           asp=1,breaks=anom_brks,col=anom_cols,
           xlab='',ylab='',las=1,
           nlevel=length(anom_cols),legend.mar=5)
+arrows(lonlat$lon,
+       lonlat$lat,
+       lonlat$lon+as.vector(u)/abs(as.vector(uv))/5,
+       lonlat$lat+as.vector(v)/abs(as.vector(uv))/5,
+       length = .025,
+       col=alpha(1,(as.vector(uv)/max(uv,na.rm=T))))
 plot(world,col='gray70',add=T)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
