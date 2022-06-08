@@ -39,6 +39,33 @@ anom <- ncvar_get(data,'anom',
 
 nc_close(data)
 
+
+### https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_third-deg?ids=Keywords:Projects&values=Oceans:Ocean%20Circulation::OSCAR&provider=PODAAC
+url <- 'https://opendap.jpl.nasa.gov/opendap/OceanCirculation/oscar/preview/L4/oscar_third_deg/oscar_vel10837.nc.gz'
+data <- try(nc_open(url))
+
+time <- ncvar_get(data,'time')
+time2 <- as.Date(time,origin='1992-10-05 00:00:00')
+
+lat2 <- ncvar_get(data,'latitude')
+ind_lat2 <- which(lat2>=latbox_s & lat2<=latbox_n)
+ind_lat2 <- ind_lat2-1
+lon2 <- ncvar_get(data,'longitude')
+ind_lon2 <- which(lon2>=lonbox_w & lon2<=lonbox_e)
+ind_lon2 <- ind_lon2-1
+
+u <- ncvar_get(data,'u',
+                 start=c(ind_lon2[1],ind_lat2[1],1,1),
+                 count=c(length(ind_lon2),length(ind_lat2),1,1))
+
+v <- ncvar_get(data,'v',
+                  start=c(ind_lon2[1],ind_lat2[1],1,1),
+                  count=c(length(ind_lon2),length(ind_lat2),1,1))
+
+nc_close(data)
+
+uv <- sqrt(u^2 + v^2)
+
 ### breaks and colors
 # sst
 sst_brks <- pretty(sst,n=30)
@@ -58,6 +85,7 @@ imagePlot(lon[ind_lon]-360,
           asp=1,breaks=sst_brks,col=sst_cols,
           xlab='',ylab='',las=1,
           nlevel=length(sst_cols),legend.mar=5)
+arrows(lon)
 plot(world,col='gray70',add=T)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
