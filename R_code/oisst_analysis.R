@@ -14,8 +14,8 @@ latbox_n <- 31 ### northern coast
 latbox_s <- 17.5 ### remove the Keys
 
 ### https://www.ncei.noaa.gov/products/optimum-interpolation-sst
-url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/202205/oisst-avhrr-v02r01.20220526_preliminary.nc'
-data <- nc_open(url)
+url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/202206/oisst-avhrr-v02r01.20220607_preliminary.nc'
+data <- try(nc_open(url))
 
 time <- ncvar_get(data,'time')
 time2 <- as.Date(time,origin='1978-01-01 12:00:00')
@@ -73,3 +73,6 @@ plot(world,col='gray70',add=T)
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('Surface Temperature Anomaly (',degree,'C)')),adj=1)
+
+
+### create daily plots with current YTD versus mean, max, and min
