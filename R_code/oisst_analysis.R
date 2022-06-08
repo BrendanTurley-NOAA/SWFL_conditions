@@ -1,4 +1,6 @@
+
 library(fields)
+library(lubridate)
 library(ncdf4)
 
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
@@ -39,6 +41,8 @@ anom <- ncvar_get(data,'anom',
 
 nc_close(data)
 
+# Which OSCAR file?
+as.integer(Sys.time()-as.POSIXct('1992-10-05'))
 
 ### https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_third-deg?ids=Keywords:Projects&values=Oceans:Ocean%20Circulation::OSCAR&provider=PODAAC
 url <- 'https://opendap.jpl.nasa.gov/opendap/OceanCirculation/oscar/preview/L4/oscar_third_deg/oscar_vel10837.nc.gz'
