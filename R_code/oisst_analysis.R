@@ -70,6 +70,7 @@ nc_close(data)
 # Which OSCAR file?
 as.integer(Sys.time()-as.POSIXct('1992-10-05'))
 
+### every 5 days
 as.Date(10837,origin='1992-10-05')
 
 ### https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_third-deg?ids=Keywords:Projects&values=Oceans:Ocean%20Circulation::OSCAR&provider=PODAAC
