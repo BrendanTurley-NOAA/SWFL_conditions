@@ -3,6 +3,31 @@ library(fields)
 library(lubridate)
 library(ncdf4)
 library(scales)
+library(rgdal)
+
+setwd("~/Desktop/professional/biblioteca/data")
+bathy <- nc_open('etopo1.nc')
+topo <- ncvar_get(bathy, 'Band1')
+topo_lat <- ncvar_get(bathy, 'lat')
+topo_lon <- ncvar_get(bathy, 'lon')
+nc_close(bathy)
+
+################## geographic scope
+lonbox_e <- -79 ### Florida Bay
+lonbox_w <- -99 ### mouth of Mississippi River
+latbox_n <- 31 ### northern coast
+latbox_s <- 17.5 ### remove the Keys
+
+ind_lat <- which(topo_lat<latbox_n & topo_lat>latbox_s)
+ind_lon <- which(topo_lon<lonbox_e & topo_lon>lonbox_w)
+
+topo_lat <- topo_lat[ind_lat]
+topo_lon <- topo_lon[ind_lon]
+topo <- topo[ind_lon,ind_lat]
+
+### load map
+setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_shp/h/")
+world <- readOGR('GSHHS_h_L1.shp')
 
 temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
 anom_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
@@ -44,6 +69,8 @@ nc_close(data)
 
 # Which OSCAR file?
 as.integer(Sys.time()-as.POSIXct('1992-10-05'))
+
+as.Date(10837,origin='1992-10-05')
 
 ### https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_third-deg?ids=Keywords:Projects&values=Oceans:Ocean%20Circulation::OSCAR&provider=PODAAC
 url <- 'https://opendap.jpl.nasa.gov/opendap/OceanCirculation/oscar/preview/L4/oscar_third_deg/oscar_vel10837.nc.gz'
@@ -111,6 +138,7 @@ arrows(lonlat$lon,
        length = .025,
        col=alpha(1,(as.vector(uv)/max(uv,na.rm=T))))
 plot(world,col='gray70',add=T)
+contour(topo_lon,topo_lat,topo,add=T,levels=c(-200),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('Surface Temperature (',degree,'C)')),adj=1)
@@ -128,6 +156,7 @@ arrows(lonlat$lon,
        length = .025,
        col=alpha(1,(as.vector(uv)/max(uv,na.rm=T))))
 plot(world,col='gray70',add=T)
+contour(topo_lon,topo_lat,topo,add=T,levels=c(-200),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
 mtext(expression(paste('Latitude (',degree,'N)')),2,line=3)
 mtext(expression(paste('Surface Temperature Anomaly (',degree,'C)')),adj=1)
