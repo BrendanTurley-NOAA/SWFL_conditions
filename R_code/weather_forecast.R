@@ -3,7 +3,8 @@
 library(fields)
 library(rNOMADS)
 
-model.list<- NOMADSRealTimeList("dods")
+# model.list <- NOMADSRealTimeList("grib")
+model.list <- NOMADSRealTimeList("dods")
 
 #get the available dates and urls for this model (14 day archive)
 model.urls <- GetDODSDates("gfs_0p50")
@@ -24,7 +25,8 @@ model.run.info <- GetDODSModelRunInfo(latest.model, latest.model.run)
 # OR You can search the file for specific model 
 #   variables such as temperature: 
 #   model.run.info[grep("temp", model.run.info)]
-variable <- "tmp2m"
+# variable <- "tmp2m"
+variable <- "ugrd10m"
 time <- c(0, 0) # Analysis run, index starts at 0
 lon <- c(0, 719) # All 720 longitude points (it's total_points -1)
 lat <- c(0, 360) # All 361 latitude points
