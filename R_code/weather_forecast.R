@@ -8,6 +8,8 @@ model.list <- NOMADSRealTimeList("dods")
 
 #get the available dates and urls for this model (14 day archive)
 model.urls <- GetDODSDates("gfs_0p50")
+model.urls <- GetDODSDates("gfs_0p25")
+model.urls <- GetDODSDates("ncom")
 
 latest.model <- tail(model.urls$url, 1)
 
