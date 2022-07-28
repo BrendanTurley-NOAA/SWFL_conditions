@@ -38,7 +38,7 @@ world <- crop(world, extent(-87, -79, 24, 31))
 ### FL cities
 setwd("~/Desktop/professional/projects/postdoc_FL/data/")
 fl <- read.csv('fl_cities.csv')
-fl <- fl[-seq(2,6,2),]
+fl <- fl[c(1,2,4,6),]
 
 ### colorpalettes
 ### breaks and colors
