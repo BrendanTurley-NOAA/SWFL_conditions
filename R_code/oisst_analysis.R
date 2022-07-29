@@ -69,9 +69,9 @@ anom_m <- matrix(anom_grab$data$anom[which(anom_grab$data$time=='2022-07-14T12:0
 # sst_cols <- temp_col(length(sst_brks)-1)
 # anom
 # anom_brks <- pretty(anom,30)
-anom_brks <- seq(-2,2,.1)
-anom_m[which(anom_m<(-2))] <- -2
-anom_m[which(anom_m>2)] <- 2
+anom_brks <- seq(-3,3,.1)
+anom_m[which(anom_m<(-3))] <- -3
+anom_m[which(anom_m>3)] <- 3
 
 anom_cols <- c(anom_neg(length(which(anom_brks<0))),
                anom_pos(length(which(anom_brks>0))))
@@ -86,7 +86,7 @@ imagePlot(lon,
 
 
 ### https://www.ncei.noaa.gov/products/optimum-interpolation-sst
-url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/202206/oisst-avhrr-v02r01.20220607_preliminary.nc'
+url <- 'https://www.ncei.noaa.gov/thredds/dodsC/OisstBase/NetCDF/V2.1/AVHRR/202206/oisst-avhrr-v02r01.20220607.nc'
 data <- try(nc_open(url))
 
 time <- ncvar_get(data,'time')
