@@ -50,7 +50,38 @@ latitude = c(latbox_s, latbox_n)
 longitude = c(lonbox_w, lonbox_e)
 time <- '2022-07-13T12:00:00Z'
 
-anom_grab <- griddap(sst_pull, zlev=0, latitude=latitude, longitude=longitude, time=time ,fields='sst')
+anom_grab <- griddap('ncdcOisst21Agg_LonPM180',
+                     time=c('last-5','last'),
+                     zlev=c(0,0),
+                     latitude=latitude,
+                     longitude=longitude ,
+                     fields='anom')
+
+lon <- sort(unique(anom_grab$data$lon))
+lat <- sort(unique(anom_grab$data$lat))
+
+anom_m <- matrix(anom_grab$data$anom[which(anom_grab$data$time=='2022-07-14T12:00:00Z')]
+                 ,30,26)
+
+### breaks and colors
+# sst
+# sst_brks <- pretty(sst,n=30)
+# sst_cols <- temp_col(length(sst_brks)-1)
+# anom
+# anom_brks <- pretty(anom,30)
+anom_brks <- seq(-2,2,.1)
+anom_m[which(anom_m<(-2))] <- -2
+anom_m[which(anom_m>2)] <- 2
+
+anom_cols <- c(anom_neg(length(which(anom_brks<0))),
+               anom_pos(length(which(anom_brks>0))))
+
+imagePlot(lon,
+          lat,
+          anom_m,
+          asp=1,breaks=anom_brks,col=anom_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(anom_cols),legend.mar=5)
 
 
 
