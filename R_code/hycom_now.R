@@ -247,7 +247,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_surf_now_sub)+.1)/(max(uv_surf_now_sub,na.rm=T)+.1)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -273,7 +274,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_surf_now_sub)+.1)/(max(uv_surf_now_sub,na.rm=T)+.1)))
+       # col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -305,7 +307,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_now_sub)+.01)/(max(uv_bot_now_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -331,7 +334,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_now_sub)+.01)/(max(uv_bot_now_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -365,7 +369,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_surf_now_sub)+.1)/(max(uv_surf_now_sub,na.rm=T)+.1)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -393,7 +398,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_surf_now_sub)+.1)/(max(uv_surf_now_sub,na.rm=T)+.1)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -443,7 +449,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        lonlat$lat+as.vector(v_surf_nows)/abs(as.vector(uv_surf_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_surf_now_sub)/max(uv_surf_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_surf_now_sub)+.1)/(max(uv_surf_now_sub,na.rm=T)+.1)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)
@@ -466,7 +473,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        lonlat$lat+as.vector(v_bot_nows)/abs(as.vector(uv_bot_now_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_now_sub)/max(uv_bot_now_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_now_sub)+.1)/(max(uv_bot_now_sub,na.rm=T)+.1)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 mtext(expression(paste('Longitude (',degree,'W)')),1,line=3)

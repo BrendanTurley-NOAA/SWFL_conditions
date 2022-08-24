@@ -230,7 +230,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)+.01)/(max(uv_bot_7dm_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -259,7 +260,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)+.01)/(max(uv_bot_7dm_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -293,7 +295,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)+.01)/(max(uv_bot_7dm_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
@@ -321,7 +324,8 @@ arrows(lonlat$lon,
        lonlat$lon+as.vector(u_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        lonlat$lat+as.vector(v_bot_7dms)/abs(as.vector(uv_bot_7dm_sub))/10,
        length = .025,
-       col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       # col=alpha(1,(as.vector(uv_bot_7dm_sub)/max(uv_bot_7dm_sub,na.rm=T))))
+       col=alpha(1,(as.vector(uv_bot_7dm_sub)+.01)/(max(uv_bot_7dm_sub,na.rm=T)+.01)))
 contour(topo_lon,topo_lat,topo,
         add=T,levels=c(-200,-100,-50,-25,-10),col='gray40')
 points(fl$longitude,fl$latitude,pch=21,col='white',bg=1,lwd=1.5)
