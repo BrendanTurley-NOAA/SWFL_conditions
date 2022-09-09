@@ -9,7 +9,7 @@ model.list <- NOMADSRealTimeList("dods")
 
 #get the available dates and urls for this model (14 day archive)
 model.urls <- GetDODSDates("gfs_0p50")
-model.urls <- GetDODSDates("gfs_0p25")
+# model.urls <- GetDODSDates("gfs_0p25")
 model.urls <- GetDODSDates("ncom")
 
 latest.model <- tail(model.urls$url, 1)
@@ -43,7 +43,7 @@ model.data <- DODSGrab(latest.model, latest.model.run,
 model.data$lon<-ifelse(model.data$lon>180,model.data$lon-360,model.data$lon)
 
 # regrid the data
-model.grid <- ModelGrid(model.data, c(0.5, 0.5), model.domain = c(-100,-50,60,10) )
+model.grid <- ModelGrid(model.data, c(0.5, 0.5), model.domain = c(-100,-79,31,18) )
 
 # replace out-of-bounds values
 model.grid$z <- ifelse (model.grid$z>99999,NA,model.grid$z)
