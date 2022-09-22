@@ -6,10 +6,13 @@ library(rNOMADS)
 
 model.list <- NOMADSRealTimeList("grib")
 model.list <- NOMADSRealTimeList("dods")
+archived.model.list <- NOMADSArchiveList()
 
 #get the available dates and urls for this model (14 day archive)
 model.urls <- GetDODSDates("gfs_0p50")
 # model.urls <- GetDODSDates("gdas_0p25")
+model.urls <- GetDODSDates("gfs_0p25")
+model.urls <- GetDODSDates("gens_ndgd")
 # model.urls <- GetDODSDates("rtofs")
 
 latest.model <- tail(model.urls$url, 1)
@@ -30,15 +33,20 @@ model.run.info <- GetDODSModelRunInfo(latest.model, latest.model.run)
 #   model.run.info[grep("temp", model.run.info)]
 # variable <- "tmp2m"
 variable <- "tmpsig995"
+variable <- "pressfc"
 # variable <- "ugrd10m"
 time <- c(0, 0) # Analysis run, index starts at 0
 lon <- c(0, 719) # All 720 longitude points (it's total_points -1)
 lat <- c(0, 360) # All 361 latitude points
 lev <- NULL      # DO NOT include level if variable is non-level type
+### https://www.e-education.psu.edu/meteo810/node/1901
+ensemble <- c(0, 0) #All available ensembles
+
 
 print("getting data...")
 model.data <- DODSGrab(latest.model, latest.model.run,
-                       variable, time, levels=lev, lon, lat)
+                       variable, time, levels=lev, lon, lat,
+                       ensemble = ensemble)
 
 # reorder the lat/lon so that the maps work
 model.data$lon<-ifelse(model.data$lon>180,model.data$lon-360,model.data$lon)
