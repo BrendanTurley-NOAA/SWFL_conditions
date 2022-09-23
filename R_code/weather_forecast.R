@@ -40,7 +40,7 @@ lon <- c(0, 719) # All 720 longitude points (it's total_points -1)
 lat <- c(0, 360) # All 361 latitude points
 lev <- NULL      # DO NOT include level if variable is non-level type
 ### https://www.e-education.psu.edu/meteo810/node/1901
-ensemble <- c(0, 0) #All available ensembles
+ensemble <- c(0, 9) #All available ensembles
 
 
 print("getting data...")
