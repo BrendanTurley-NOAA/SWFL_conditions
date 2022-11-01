@@ -94,7 +94,9 @@ map('world',add=T)
 
 
 
-variable <- "pressfc"
+# variable <- "pressfc"
+# variable <- 'gustsfc'
+# variable <- 'pratesfc'
 variable <- 'msletmsl'
 time <- c(0, 0) # Analysis run, index starts at 0
 lon <- c(0, 719) # All 720 longitude points (it's total_points -1)
@@ -124,6 +126,16 @@ imagePlot(model.grid$x, sort(model.grid$y), model.grid2$z[1,1,,],
           main = paste("10m Winds",
                        model.grid$fcst.date),asp=1,
           col=mako(60),nlevel=59)
+arrows(lon.lat$lon, lon.lat$lat,
+       lon.lat$lon+(model.grid$z[1,1,,]/10), lon.lat$lat+(model.grid$z[1,2,,]/10),
+       length=.02,col='gray80')
+map('world',add=T)
+
+imagePlot(model.grid$x, sort(model.grid$y), model.grid2$z[1,1,,],
+          xlab = "Longitude", ylab = "Latitude",
+          main = paste("10m Winds",
+                       model.grid$fcst.date),asp=1,
+          col=plasma(60),nlevel=59)
 arrows(lon.lat$lon, lon.lat$lat,
        lon.lat$lon+(model.grid$z[1,1,,]/10), lon.lat$lat+(model.grid$z[1,2,,]/10),
        length=.02,col='gray80')
