@@ -6,6 +6,32 @@ library(ncdf4)
 library(scales)
 library(rgdal)
 
+erddap_extract <- function(data, info, parameter){
+  data_temp <- data$data
+  ind_extract <- which(names(data_temp)==parameter)
+  time_step <- unique(data_temp$time)
+  lon <- data$summary$dim$longitude$vals
+  lat <- data$summary$dim$latitude$vals
+  
+  new_data <- array(data_temp[,ind_extract], 
+                    c(length(lon),
+                      length(lat),
+                      length(time_step)))
+  
+  row_ind <- which(info$alldata$NC_GLOBAL$attribute_name=='title')
+  col_ind <- which(colnames(info$alldata$NC_GLOBAL)=='value')
+  name <- info$alldata$NC_GLOBAL[row_ind,col_ind]
+  name <- unlist(strsplit(name,split=','))
+  return(list(data = new_data,
+              lon = lon,
+              lat = lat,
+              time = time_step,
+              name = name))
+  # setClass('erddap',slots=c(data='matrix',lon='array',lat='array'))
+  # return(new('erddap',data=new_data,lon=lon,lat=lat))
+  # return(list(new_data,lon,lat))
+}
+
 setwd("~/Desktop/professional/biblioteca/data")
 bathy <- nc_open('etopo1.nc')
 topo <- ncvar_get(bathy, 'Band1')
@@ -44,24 +70,33 @@ latbox_s <- 17.5 ### remove the Keys
 
 ### erddap
 
-sst_pull <- info('ncdcOisst21Agg_LonPM180')
+# sst_pull <- info('ncdcOisst21Agg_LonPM180')
+sst_pull <- info('ncdcOisst21Agg')
 
 latitude = c(latbox_s, latbox_n)
 longitude = c(lonbox_w, lonbox_e)
-time <- '2022-07-13T12:00:00Z'
+# time <- '2022-07-13T12:00:00Z'
 
-anom_grab <- griddap('ncdcOisst21Agg_LonPM180',
-                     time=c('last-5','last'),
+anom_grab <- griddap(sst_pull,
+                     time=c('last-14','last'),
                      zlev=c(0,0),
                      latitude=latitude,
-                     longitude=longitude ,
+                     longitude=longitude,
                      fields='anom')
+
+sst_grab <- griddap(sst_pull,
+                     time=c('last-14','last'),
+                     zlev=c(0,0),
+                     latitude=latitude,
+                     longitude=longitude,
+                     fields='sst')
 
 lon <- sort(unique(anom_grab$data$lon))
 lat <- sort(unique(anom_grab$data$lat))
 
-anom_m <- matrix(anom_grab$data$anom[which(anom_grab$data$time=='2022-07-14T12:00:00Z')]
-                 ,30,26)
+sst_1 <- erddap_extract(sst_grab,sst_pull,'sst')
+
+imagePlot(sst_1$data[,,1])
 
 ### breaks and colors
 # sst
