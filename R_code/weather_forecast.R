@@ -5,7 +5,7 @@ library(fields)
 library(maps)
 library(rNOMADS)
 
-model.list <- NOMADSRealTimeList("grib")
+# model.list <- NOMADSRealTimeList("grib")
 model.list <- NOMADSRealTimeList("dods")
 # archived.model.list <- NOMADSArchiveList()
 
