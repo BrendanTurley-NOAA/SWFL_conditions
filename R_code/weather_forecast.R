@@ -5,8 +5,8 @@ library(fields)
 library(maps)
 library(rNOMADS)
 
-# model.list <- NOMADSRealTimeList("grib")
-model.list <- NOMADSRealTimeList("dods")
+model.list <- NOMADSRealTimeList("grib")
+# model.list <- NOMADSRealTimeList("dods")
 # archived.model.list <- NOMADSArchiveList()
 
 #get the available dates and urls for this model (14 day archive)
@@ -140,3 +140,29 @@ arrows(lon.lat$lon, lon.lat$lat,
        lon.lat$lon+(model.grid$z[1,1,,]/10), lon.lat$lat+(model.grid$z[1,2,,]/10),
        length=.02,col='gray80')
 map('world',add=T)
+
+
+
+### RTOFS
+model.urls <- GetDODSDates("rtofs")
+
+latest.model <- model.urls$url[1]
+
+# Get the model runs for a date
+model.runs <- GetDODSModelRuns(latest.model)
+
+latest.model.run <- model.runs$model.run[8]
+
+GetDODSModelRunInfo(latest.model,model.runs$model.run[8])
+
+
+variable <- 'sea_water_potential_temperature'
+time <- c(0, 4) # Analysis run, index starts at 0
+lon <- c(0, 699) # All 720 longitude points (it's total_points -1)
+lat <- c(0, 1649) # All 361 latitude points
+lev <- 0      # DO NOT include level if variable is non-level type
+
+
+print("getting data...")
+model.data <- DODSGrab(latest.model, latest.model.run,
+                       variable, time, levels=lev, lon, lat)
