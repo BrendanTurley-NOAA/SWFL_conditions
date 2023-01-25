@@ -42,7 +42,7 @@ fl <- fl[c(1,2,4,6),]
 
 ### colorpalettes
 ### breaks and colors
-temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
+temp_col <- colorRampPalette(c('gray20','purple3','darkorange','gold'))
 sal_col <- colorRampPalette(c('midnightblue','dodgerblue4','seagreen3','khaki1'))
 uv_col <- colorRampPalette(c('white','thistle1','purple2'))
 lm_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
