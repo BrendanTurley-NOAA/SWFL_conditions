@@ -104,6 +104,10 @@ imagePlot(sst_1$data[,,1])
 # sst_cols <- temp_col(length(sst_brks)-1)
 # anom
 # anom_brks <- pretty(anom,30)
+
+anom <- erddap_extract(anom_grab,sst_pull,'anom')
+anom_m <- anom$data[,,1]
+
 anom_brks <- seq(-3,3,.1)
 anom_m[which(anom_m<(-3))] <- -3
 anom_m[which(anom_m>3)] <- 3
