@@ -56,7 +56,7 @@ topo <- topo[ind_lon,ind_lat]
 setwd("~/Desktop/professional/biblioteca/data/shapefiles/gshhg-shp-2.3.7/GSHHS_shp/h/")
 world <- readOGR('GSHHS_h_L1.shp')
 
-temp_col <- colorRampPalette(c('gray20','purple','darkorange','gold'))
+temp_col <- colorRampPalette(c('gray10','purple4','purple','darkorange','gold'))
 anom_neg <- colorRampPalette(c('dodgerblue4','deepskyblue3','lightskyblue1','gray95'))
 anom_pos <- colorRampPalette(c('gray95','rosybrown1','tomato2','red4'))
 
@@ -72,20 +72,22 @@ latbox_s <- 17.5 ### remove the Keys
 
 # sst_pull <- info('ncdcOisst21Agg_LonPM180')
 sst_pull <- info('ncdcOisst21Agg')
+as.Date(as.numeric(unlist(strsplit(sst_pull$alldata$time$value[3],',')))/(3600*24),
+        origin=dmy_hms(sst_pull$alldata$time$value[8]))
 
 latitude = c(latbox_s, latbox_n)
 longitude = c(lonbox_w, lonbox_e)
 # time <- '2022-07-13T12:00:00Z'
 
 anom_grab <- griddap(sst_pull,
-                     time=c('last-14','last'),
+                     time=c('2022-01-06','2022-02-06'),
                      zlev=c(0,0),
                      latitude=latitude,
                      longitude=longitude,
                      fields='anom')
 
 sst_grab <- griddap(sst_pull,
-                     time=c('last-14','last'),
+                    time=c('2022-01-06','2022-02-06'),
                      zlev=c(0,0),
                      latitude=latitude,
                      longitude=longitude,
@@ -95,8 +97,17 @@ lon <- sort(unique(anom_grab$data$lon))
 lat <- sort(unique(anom_grab$data$lat))
 
 sst_1 <- erddap_extract(sst_grab,sst_pull,'sst')
+sst_m <- apply(sst_1$data[,,1],c(1,2),mean,na.rm=T)
 
-imagePlot(sst_1$data[,,1])
+sst_brks <- pretty(sst_m,n=30)
+sst_cols <- temp_col(length(sst_brks)-1)
+
+imagePlot(lon,
+          lat,
+          sst_m,
+          asp=1,breaks=sst_brks,col=sst_cols,
+          xlab='',ylab='',las=1,
+          nlevel=length(sst_cols),legend.mar=5)
 
 ### breaks and colors
 # sst
@@ -106,7 +117,7 @@ imagePlot(sst_1$data[,,1])
 # anom_brks <- pretty(anom,30)
 
 anom <- erddap_extract(anom_grab,sst_pull,'anom')
-anom_m <- anom$data[,,1]
+anom_m <- apply(anom$data[,,1],c(1,2),mean,na.rm=T)
 
 anom_brks <- seq(-3,3,.1)
 anom_m[which(anom_m<(-3))] <- -3
